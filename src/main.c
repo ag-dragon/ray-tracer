@@ -19,5 +19,6 @@ int main(int argc, char *argv[]) {
             printf("%d %d %d\n", ir, ig, ib);
         }
     }
+
     return 0;
 }

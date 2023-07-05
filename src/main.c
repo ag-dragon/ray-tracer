@@ -7,6 +7,7 @@ int main(int argc, char *argv[]) {
     printf("P3\n%d %d\n255\n", image_width, image_height);
 
     for (int y = image_height; y >= 0; --y) {
+        fprintf(stderr, "Scanlines remaining: %d\n", y);
         for (int x = 0; x < image_width; ++x) {
             double r = (double) x / (image_width-1);
             double g = (double) y / (image_height-1);
@@ -19,6 +20,8 @@ int main(int argc, char *argv[]) {
             printf("%d %d %d\n", ir, ig, ib);
         }
     }
+
+    fprintf(stderr, "Done!\n");
 
     return 0;
 }

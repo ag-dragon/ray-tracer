@@ -8,7 +8,7 @@ OBJ := $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 CPPFLAGS := -Isrc -MMD -MP # -MMD and -MP flags required to detect header changes
 CFLAGS   := -Wall
-LDFLAGS  :=
+LDFLAGS  := -L/usr/local/lib -Wl,-rpath=/usr/local/lib
 LDLIBS   := -lm -lcglm
 
 .PHONY: all clean

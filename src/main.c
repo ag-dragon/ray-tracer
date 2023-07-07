@@ -18,7 +18,7 @@ void ray_color(const Ray *r, vec3 dest) {
 int main(int argc, char *argv[]) {
     // Image
     const double aspect_ratio = 16.0 / 9.0;
-    const int image_width     = 400;
+    const int image_width     = 800;
     const int image_height    = (int) (image_width / aspect_ratio);
 
     // Camera
@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
             
             vec3 uhor, vver;
             glm_vec3_scale(horizontal, u, uhor);
-            glm_vec3_scale(vertical, u, vver);
+            glm_vec3_scale(vertical, v, vver);
             glm_vec3_add(lower_left_corner, uhor, r.direction);
             glm_vec3_add(r.direction, vver, r.direction);
             glm_vec3_sub(r.direction, origin, r.direction);

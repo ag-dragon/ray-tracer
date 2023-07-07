@@ -10,15 +10,15 @@ double sphere_collision(const vec3 center, double radius, const Ray *r) {
     vec3 direction = {r->direction[0], r->direction[1], r->direction[2]};
     vec3 oc;
     glm_vec3_sub(origin, center_copy, oc);
-    double a = glm_vec3_dot(direction, direction);
-    double b = 2.0 * glm_vec3_dot(oc, direction);
-    double c = glm_vec3_dot(oc, oc) - radius*radius;
-    double discriminant = b*b - 4*a*c;
+    double a = glm_vec3_norm2(direction);
+    double half_b = glm_vec3_dot(oc, direction);
+    double c = glm_vec3_norm(oc) - radius*radius;
+    double discriminant = half_b*half_b - a*c;
 
     if (discriminant < 0.0) {
         return -1.0;
     } else {
-        return (-b - sqrt(discriminant)) / (2.0*a);
+        return (-half_b - sqrt(discriminant)) / a;
     }
 }
 

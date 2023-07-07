@@ -1,9 +1,10 @@
 #include "color.h"
 #include "ray.h"
 #include <cglm/cglm.h>
+#include <math.h>
 #include <stdio.h>
 
-bool sphere_collision(const vec3 center, double radius, const Ray *r) {
+double sphere_collision(const vec3 center, double radius, const Ray *r) {
     vec3 center_copy = {center[0], center[1], center[2]};
     vec3 origin = {r->origin[0], r->origin[1], r->origin[2]};
     vec3 direction = {r->direction[0], r->direction[1], r->direction[2]};
@@ -13,18 +14,29 @@ bool sphere_collision(const vec3 center, double radius, const Ray *r) {
     double b = 2.0 * glm_vec3_dot(oc, direction);
     double c = glm_vec3_dot(oc, oc) - radius*radius;
     double discriminant = b*b - 4*a*c;
-    return (discriminant > 0);
+
+    if (discriminant < 0.0) {
+        return -1.0;
+    } else {
+        return (-b - sqrt(discriminant)) / (2.0*a);
+    }
 }
 
 void ray_color(const Ray *r, vec3 dest) {
-    if (sphere_collision((vec3) {0, 0, -1}, 0.5, r)) {
-        glm_vec3_copy((vec3) {1, 0, 0}, dest);
+    double t = sphere_collision((vec3) {0, 0, -1}, 0.5, r);
+    if (t > 0.0) {
+        vec3 norm;
+        ray_at(r, t, norm);
+        glm_vec3_sub(norm, (vec3) {0, 0, -1}, norm);
+        glm_vec3_normalize(norm);
+
+        glm_vec3_scale((vec3) {norm[0]+1, norm[1]+1, norm[2]+1}, 0.5, dest);
         return;
     }
 
     vec3 unit_direction = {r->direction[0], r->direction[1], r->direction[2]};
     glm_vec3_normalize(unit_direction);
-    double t = 0.5*(unit_direction[1] + 1.0);
+    t = 0.5*(unit_direction[1] + 1.0);
 
     vec3 color1 = GLM_VEC3_ONE_INIT;
     glm_vec3_scale(color1, (1.0-t), color1);

@@ -3,7 +3,25 @@
 #include <cglm/cglm.h>
 #include <stdio.h>
 
+bool sphere_collision(const vec3 center, double radius, const Ray *r) {
+    vec3 center_copy = {center[0], center[1], center[2]};
+    vec3 origin = {r->origin[0], r->origin[1], r->origin[2]};
+    vec3 direction = {r->direction[0], r->direction[1], r->direction[2]};
+    vec3 oc;
+    glm_vec3_sub(origin, center_copy, oc);
+    double a = glm_vec3_dot(direction, direction);
+    double b = 2.0 * glm_vec3_dot(oc, direction);
+    double c = glm_vec3_dot(oc, oc) - radius*radius;
+    double discriminant = b*b - 4*a*c;
+    return (discriminant > 0);
+}
+
 void ray_color(const Ray *r, vec3 dest) {
+    if (sphere_collision((vec3) {0, 0, -1}, 0.5, r)) {
+        glm_vec3_copy((vec3) {1, 0, 0}, dest);
+        return;
+    }
+
     vec3 unit_direction = {r->direction[0], r->direction[1], r->direction[2]};
     glm_vec3_normalize(unit_direction);
     double t = 0.5*(unit_direction[1] + 1.0);
@@ -43,7 +61,7 @@ int main(int argc, char *argv[]) {
     printf("P3\n%d %d\n255\n", image_width, image_height);
 
     for (int y = image_height; y >= 0; --y) {
-        fprintf(stderr, "Scanlines remaining: %d\n", y);
+        //fprintf(stderr, "Scanlines remaining: %d\n", y);
         for (int x = 0; x < image_width; ++x) {
             double u = (double) x / (image_width-1);
             double v = (double) y / (image_height-1);

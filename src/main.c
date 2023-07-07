@@ -1,29 +1,18 @@
 #include "color.h"
 #include "ray.h"
+#include "sphere.h"
+#include "hit_record.h"
 #include <cglm/cglm.h>
 #include <math.h>
 #include <stdio.h>
 
-double sphere_collision(const vec3 center, double radius, const Ray *r) {
-    vec3 center_copy = {center[0], center[1], center[2]};
-    vec3 origin = {r->origin[0], r->origin[1], r->origin[2]};
-    vec3 direction = {r->direction[0], r->direction[1], r->direction[2]};
-    vec3 oc;
-    glm_vec3_sub(origin, center_copy, oc);
-    double a = glm_vec3_norm2(direction);
-    double half_b = glm_vec3_dot(oc, direction);
-    double c = glm_vec3_norm(oc) - radius*radius;
-    double discriminant = half_b*half_b - a*c;
-
-    if (discriminant < 0.0) {
-        return -1.0;
-    } else {
-        return (-half_b - sqrt(discriminant)) / a;
-    }
-}
-
-void ray_color(const Ray *r, vec3 dest) {
-    double t = sphere_collision((vec3) {0, 0, -1}, 0.5, r);
+void ray_color(const ray *r, vec3 dest) {
+    sphere s;
+    sphere_init(&s, (vec3) {0, 0, -1}, 0.5);
+    hit_record rec;
+    hit_record_init(&rec, GLM_VEC3_ZERO, GLM_VEC3_ZERO, 0);
+    sphere_collision(&s, r, 0.0, 1.0, &rec);
+    double t = rec.t;
     if (t > 0.0) {
         vec3 norm;
         ray_at(r, t, norm);
@@ -77,7 +66,7 @@ int main(int argc, char *argv[]) {
         for (int x = 0; x < image_width; ++x) {
             double u = (double) x / (image_width-1);
             double v = (double) y / (image_height-1);
-            Ray r;
+            ray r;
             glm_vec3_copy(origin, r.origin);
             
             vec3 uhor, vver;

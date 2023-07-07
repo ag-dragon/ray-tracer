@@ -3,11 +3,11 @@
 
 #include <cglm/cglm.h>
 
-typedef struct Ray {
+typedef struct ray {
     vec3 origin;
     vec3 direction;
-} Ray;
+} ray;
 
-void ray_at(const Ray *r, double t, vec3 dest);
+void ray_at(const ray *r, double t, vec3 dest);
 
 #endif

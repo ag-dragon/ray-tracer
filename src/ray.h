@@ -8,6 +8,6 @@ typedef struct ray {
     vec3 direction;
 } ray;
 
-void ray_at(const ray *r, double t, vec3 dest);
+void ray_at(ray *r, double t, vec3 dest);
 
 #endif

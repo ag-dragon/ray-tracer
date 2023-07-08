@@ -11,7 +11,7 @@ typedef struct sphere {
     double radius;
 } sphere;
 
-void sphere_init(sphere *sphere, const vec3 center, double radius);
-bool sphere_collision(const sphere *s, const ray *r, double t_min, double t_max, hit_record *rec);
+void sphere_init(sphere *sphere, vec3 center, double radius);
+bool sphere_collision(sphere *s, ray *r, double t_min, double t_max, hit_record *rec);
 
 #endif

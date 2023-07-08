@@ -2,30 +2,25 @@
 #include "ray.h"
 #include "sphere.h"
 #include "hit_record.h"
+#include "world.h"
 #include <cglm/cglm.h>
 #include <math.h>
+#include <stdbool.h>
 #include <stdio.h>
 
-void ray_color(const ray *r, vec3 dest) {
-    sphere s;
-    sphere_init(&s, (vec3) {0, 0, -1}, 0.5);
+void ray_color(ray *r, object *object_list, int object_count, vec3 dest) {
     hit_record rec;
-    hit_record_init(&rec, GLM_VEC3_ZERO, GLM_VEC3_ZERO, 0);
-    sphere_collision(&s, r, 0.0, 1.0, &rec);
-    double t = rec.t;
-    if (t > 0.0) {
-        vec3 norm;
-        ray_at(r, t, norm);
-        glm_vec3_sub(norm, (vec3) {0, 0, -1}, norm);
-        glm_vec3_normalize(norm);
-
-        glm_vec3_scale((vec3) {norm[0]+1, norm[1]+1, norm[2]+1}, 0.5, dest);
+    if (object_list_collision(object_list, object_count, r, 0, 999999.0, &rec)) {
+        //glm_vec3_add(rec.normal, GLM_VEC3_ONE, dest);
+        //glm_vec3_scale(dest, 0.5, dest);
+        //fprintf(stderr, "hi,");
+        glm_vec3_copy((vec3) {1, 0, 0}, dest);
         return;
     }
-
-    vec3 unit_direction = {r->direction[0], r->direction[1], r->direction[2]};
+    vec3 unit_direction;
+    glm_vec3_copy(r->direction, unit_direction);
     glm_vec3_normalize(unit_direction);
-    t = 0.5*(unit_direction[1] + 1.0);
+    double t = 0.5*(unit_direction[1] + 1.0);
 
     vec3 color1 = GLM_VEC3_ONE_INIT;
     glm_vec3_scale(color1, (1.0-t), color1);
@@ -39,6 +34,18 @@ int main(int argc, char *argv[]) {
     const double aspect_ratio = 16.0 / 9.0;
     const int image_width     = 800;
     const int image_height    = (int) (image_width / aspect_ratio);
+
+    // World
+    int object_count = 1;
+    object *object_list = malloc(sizeof(object)*object_count);
+    sphere *s1 = malloc(sizeof(sphere));
+    sphere_init(s1, (vec3) {0, 0, -1}, 0.5);
+    object_list[0].id = SPHERE;
+    object_list[0].data.s = s1;
+    //sphere *s2 = malloc(sizeof(sphere));
+    //sphere_init(s2, (vec3) {0, -100.5, -1}, 50);
+    //object_list[0].id = SPHERE;
+    //object_list[0].data.s = s2;
 
     // Camera
     double viewport_height = 2.0;
@@ -77,7 +84,7 @@ int main(int argc, char *argv[]) {
             glm_vec3_sub(r.direction, origin, r.direction);
 
             vec3 pixel_color;
-            ray_color(&r, pixel_color);
+            ray_color(&r, object_list, object_count, pixel_color);
             color_write(stdout, pixel_color);
         }
     }

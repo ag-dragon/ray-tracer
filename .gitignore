@@ -1,3 +1,7 @@
-build/*
 images/*
 ray-tracer
+
+
+# Added by cargo
+
+/target

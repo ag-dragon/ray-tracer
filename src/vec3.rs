@@ -6,8 +6,20 @@ use std::ops::{{
     Sub, SubAssign,
 }};
 
-trait Sqrt {
+pub trait Sqrt {
     fn sqrt(self) -> Self;
+}
+
+impl Sqrt for f64 {
+    fn sqrt(self) -> Self {
+        self.sqrt()
+    }
+}
+
+impl Sqrt for f32 {
+    fn sqrt(self) -> Self {
+        self.sqrt()
+    }
 }
 
 #[derive(Copy, Clone, PartialEq, Debug)]
@@ -271,5 +283,220 @@ impl<T> IndexMut<usize> for Vec3<T> {
             2 => &mut self.z,
             i => panic!("index {i} out of bounds"),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_new() {
+        let v1 = Vec3::new(1.0, 2.0, 3.0);
+        assert_eq!(v1.x, 1.0);
+        assert_eq!(v1.y, 2.0);
+        assert_eq!(v1.z, 3.0);
+
+        let v2 = Vec3::new(3, 2, 1);
+        assert_eq!(v2.x, 3);
+        assert_eq!(v2.y, 2);
+        assert_eq!(v2.z, 1);
+    }
+
+    #[test]
+    fn test_length() {
+        let v = Vec3::new(1.0, 2.0, 3.0);
+        assert_eq!(v.length(), 14.0_f32.sqrt());
+    }
+
+    #[test]
+    fn test_length_squared() {
+        let v = Vec3::new(1.0, 2.0, 3.0);
+        assert_eq!(v.length_squared(), 14.0);
+    }
+
+    #[test]
+    fn test_dot() {
+        let v1 = Vec3::new(1.0, 2.0, 3.0);
+        let v2 = Vec3::new(2.0, 3.0, 4.0);
+        assert_eq!(v1.dot(v2), 20.0);
+    }
+
+    #[test]
+    fn test_cross() {
+        let v1 = Vec3::new(2.0, 3.0, 4.0);
+        let v2 = Vec3::new(5.0, 6.0, 7.0);
+        let res = v1.cross(v2);
+        assert_eq!(res.x, -3.0);
+        assert_eq!(res.y, 6.0);
+        assert_eq!(res.z, -3.0);
+    }
+
+    #[test]
+    fn test_normalized() {
+        let v = Vec3::new(1.0, 2.0, 3.0);
+        let norm = v.normalized();
+        assert_eq!(norm.length(), 1.0);
+    }
+
+    #[test]
+    fn test_add() {
+        let v1 = Vec3::new(1.0, 2.0, 3.0);
+        let v2 = Vec3::new(4.0, 5.0, 6.0);
+        let res = v1 + v2;
+        assert_eq!(res.x, 5.0);
+        assert_eq!(res.y, 7.0);
+        assert_eq!(res.z, 9.0);
+
+        let v = Vec3::new(1.0, 2.0, 3.0);
+        let res = v + 1.0;
+        assert_eq!(res.x, 2.0);
+        assert_eq!(res.y, 3.0);
+        assert_eq!(res.z, 4.0);
+    }
+
+    #[test]
+    fn test_add_assign() {
+        let mut v1 = Vec3::new(1.0, 2.0, 3.0);
+        let v2 = Vec3::new(4.0, 5.0, 6.0);
+        v1 += v2;
+        assert_eq!(v1.x, 5.0);
+        assert_eq!(v1.y, 7.0);
+        assert_eq!(v1.z, 9.0);
+
+        let mut v = Vec3::new(1.0, 2.0, 3.0);
+        v += 1.0;
+        assert_eq!(v.x, 2.0);
+        assert_eq!(v.y, 3.0);
+        assert_eq!(v.z, 4.0);
+    }
+
+    #[test]
+    fn test_sub() {
+        let v1 = Vec3::new(4.0, 5.0, 6.0);
+        let v2 = Vec3::new(1.0, 2.0, 3.0);
+        let res = v1 - v2;
+        assert_eq!(res.x, 3.0);
+        assert_eq!(res.y, 3.0);
+        assert_eq!(res.z, 3.0);
+
+        let v = Vec3::new(1.0, 2.0, 3.0);
+        let res = v - 1.0;
+        assert_eq!(res.x, 0.0);
+        assert_eq!(res.y, 1.0);
+        assert_eq!(res.z, 2.0);
+    }
+
+    #[test]
+    fn test_sub_assign() {
+        let mut v1 = Vec3::new(4.0, 5.0, 6.0);
+        let v2 = Vec3::new(1.0, 2.0, 3.0);
+        v1 -= v2;
+        assert_eq!(v1.x, 3.0);
+        assert_eq!(v1.y, 3.0);
+        assert_eq!(v1.z, 3.0);
+
+        let mut v = Vec3::new(1.0, 2.0, 3.0);
+        v -= 1.0;
+        assert_eq!(v.x, 0.0);
+        assert_eq!(v.y, 1.0);
+        assert_eq!(v.z, 2.0);
+    }
+
+    #[test]
+    fn test_mul() {
+        let v1 = Vec3::new(4.0, 5.0, 6.0);
+        let v2 = Vec3::new(1.0, 2.0, 3.0);
+        let res = v1 * v2;
+        assert_eq!(res.x, 4.0);
+        assert_eq!(res.y, 10.0);
+        assert_eq!(res.z, 18.0);
+
+        let v = Vec3::new(1.0, 2.0, 3.0);
+        let res = v * 2.0;
+        assert_eq!(res.x, 2.0);
+        assert_eq!(res.y, 4.0);
+        assert_eq!(res.z, 6.0);
+    }
+
+    #[test]
+    fn test_mul_assign() {
+        let mut v1 = Vec3::new(1.0, 2.0, 3.0);
+        let v2 = Vec3::new(4.0, 5.0, 6.0);
+        v1 *= v2;
+        assert_eq!(v1.x, 4.0);
+        assert_eq!(v1.y, 10.0);
+        assert_eq!(v1.z, 18.0);
+
+        let mut v = Vec3::new(1.0, 2.0, 3.0);
+        v *= 2.0;
+        assert_eq!(v.x, 2.0);
+        assert_eq!(v.y, 4.0);
+        assert_eq!(v.z, 6.0);
+    }
+
+    #[test]
+    fn test_neg() {
+        let v = Vec3::new(1.0, 2.0, 3.0);
+        let res = -v;
+        assert_eq!(res.x, -1.0);
+        assert_eq!(res.y, -2.0);
+        assert_eq!(res.z, -3.0);
+    }
+
+    #[test]
+    fn test_div() {
+        let v1 = Vec3::new(4.0, 6.0, 9.0);
+        let v2 = Vec3::new(1.0, 2.0, 3.0);
+        let res = v1 / v2;
+        assert_eq!(res.x, 4.0);
+        assert_eq!(res.y, 3.0);
+        assert_eq!(res.z, 3.0);
+
+        let v = Vec3::new(2.0, 4.0, 6.0);
+        let res = v / 2.0;
+        assert_eq!(res.x, 1.0);
+        assert_eq!(res.y, 2.0);
+        assert_eq!(res.z, 3.0);
+    }
+
+    #[test]
+    fn test_div_assign() {
+        let mut v1 = Vec3::new(4.0, 6.0, 9.0);
+        let v2 = Vec3::new(1.0, 2.0, 3.0);
+        v1 /= v2;
+        assert_eq!(v1.x, 4.0);
+        assert_eq!(v1.y, 3.0);
+        assert_eq!(v1.z, 3.0);
+
+        let mut v = Vec3::new(2.0, 4.0, 6.0);
+        v /= 2.0;
+        assert_eq!(v.x, 1.0);
+        assert_eq!(v.y, 2.0);
+        assert_eq!(v.z, 3.0);
+    }
+
+    #[test]
+    fn test_index() {
+        let v = Vec3::new(1.0, 2.0, 3.0);
+        assert_eq!(v[0], 1.0);
+        assert_eq!(v[1], 2.0);
+        assert_eq!(v[2], 3.0);
+    }
+
+    #[test]
+    fn test_index_mut() {
+        let mut v = Vec3::new(0.0, 0.0, 0.0);
+
+        v[0] = 1.0;
+        v[1] = 2.0;
+        v[2] = 3.0;
+
+        assert_eq!(v[0], 1.0);
+        assert_eq!(v[1], 2.0);
+        assert_eq!(v[2], 3.0);
+        assert_eq!(v.x, 1.0);
+        assert_eq!(v.y, 2.0);
+        assert_eq!(v.z, 3.0);
     }
 }

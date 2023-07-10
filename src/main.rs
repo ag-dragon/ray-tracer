@@ -1,5 +1,5 @@
-mod vec3;
-use vec3::Vec3;
+mod vectors;
+use vectors::Vec3;
 
 type Color = Vec3<i32>;
 

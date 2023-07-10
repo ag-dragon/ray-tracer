@@ -1,3 +1,6 @@
+mod vec3;
+use vec3::Vec3;
+
 fn main() {
     let image_width = 256;
     let image_height = 256;
@@ -19,4 +22,8 @@ fn main() {
             println!("{ir} {ig} {ib}");
         }
     }
+
+    let v = Vec3::new(1.0, 1.0, 1.0);
+    
+    eprintln!("{:?}", v);
 }

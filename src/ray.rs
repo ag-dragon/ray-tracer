@@ -46,12 +46,12 @@ impl<T: Float> Ray<T> {
 
     fn hit_sphere(&self, center: Vec3<T>, radius: f64) -> f64 {
         let oc = self.origin - center;
-        let a = self.direction.dot(self.direction);
-        let b = oc.dot(self.direction) * T::from(2.0).unwrap();
-        let c = oc.dot(oc) - T::from(radius*radius).unwrap();
-        let discriminant = b*b - T::from(4.0).unwrap()*a*c;
+        let a = self.direction.length_squared();
+        let half_b = oc.dot(self.direction);
+        let c = oc.length_squared() - T::from(radius*radius).unwrap();
+        let discriminant = half_b*half_b - a*c;
         if (discriminant < T::from(0.0).unwrap()) { -1.0 } else {
-            num::cast((-b - discriminant.sqrt()) / (a*T::from(2.0).unwrap())).unwrap()
+            num::cast((-half_b - discriminant.sqrt()) / a).unwrap()
         }
     }
 }

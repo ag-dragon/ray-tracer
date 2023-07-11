@@ -34,10 +34,13 @@ impl<T: Float> Hittable<T> for Sphere<T> {
             }
 
             let p = ray.at(root);
+            let outward_normal = (p - self.center) / self.radius;
+            let front_face = ray.direction.dot(outward_normal) < T::zero();
             return Some(HitRecord {
                 point: p,
-                normal: (p - self.center) / self.radius,
+                normal: if front_face { outward_normal } else { -outward_normal },
                 t: root,
+                front_face,
             })
         }
 
@@ -83,8 +86,9 @@ mod tests {
         match h {
             Some(rec) => {
                 assert_eq!(rec.point, Vec3::new(0.0, 0.0, -0.5));
-                //assert_eq!(rec.normal, Vec3::new(0.0, 0.0, -1.0));
+                assert_eq!(rec.normal, Vec3::new(0.0, 0.0, 1.0));
                 assert_eq!(rec.t, 0.5);
+                assert!(rec.front_face);
             },
             None => assert!(false),
         }

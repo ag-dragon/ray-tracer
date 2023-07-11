@@ -10,7 +10,7 @@ pub struct HitRecord<T: Float> {
     point: Vec3<T>,
     normal: Vec3<T>,
     t: T,
-
+    front_face: bool,
 }
 
 pub trait Hittable<T: Float> {

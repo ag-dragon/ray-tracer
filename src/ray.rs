@@ -49,8 +49,12 @@ impl<T: Float> Ray<T> {
         let a = self.direction.length_squared();
         let half_b = oc.dot(self.direction);
         let c = oc.length_squared() - T::from(radius*radius).unwrap();
+
         let discriminant = half_b*half_b - a*c;
-        if (discriminant < T::from(0.0).unwrap()) { -1.0 } else {
+
+        if (discriminant < T::zero()) {
+            -1.0
+        } else {
             num::cast((-half_b - discriminant.sqrt()) / a).unwrap()
         }
     }

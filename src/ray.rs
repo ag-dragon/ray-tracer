@@ -1,7 +1,8 @@
-use num::traits::Float;
-
 use crate::vectors::Vec3;
 use crate::vectors::Color;
+use crate::shape::{Hittable, Sphere};
+
+use num::traits::Float;
 
 #[derive(Copy, Clone, Debug)]
 pub struct Ray<T: Float> {
@@ -21,7 +22,9 @@ impl<T: Float> Ray<T> {
     pub fn color(&self) -> Color {
         let mut c = Vec3::<T>::zero();
         c.z = T::from(-1.0).unwrap();
-        let mut t = self.hit_sphere(c, 0.5);
+        let s = Sphere::new(c, T::from(0.5).unwrap());
+        let mut t = s.hit(self, (T::from(0.0).unwrap(), T::from(2.0).unwrap()));
+        /*
         if t > 0.0 {
             let mut n = (self.at(T::from(t).unwrap()) - c).normalized();
             n += Vec3::<T>::one();
@@ -42,21 +45,8 @@ impl<T: Float> Ray<T> {
             num::cast(res.y * T::from(255.999).unwrap()).unwrap(),
             num::cast(res.z * T::from(255.999).unwrap()).unwrap()
         )
-    }
-
-    fn hit_sphere(&self, center: Vec3<T>, radius: f64) -> f64 {
-        let oc = self.origin - center;
-        let a = self.direction.length_squared();
-        let half_b = oc.dot(self.direction);
-        let c = oc.length_squared() - T::from(radius*radius).unwrap();
-
-        let discriminant = half_b*half_b - a*c;
-
-        if (discriminant < T::zero()) {
-            -1.0
-        } else {
-            num::cast((-half_b - discriminant.sqrt()) / a).unwrap()
-        }
+        */
+        Color::zero()
     }
 }
 

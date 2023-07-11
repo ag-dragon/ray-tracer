@@ -1,5 +1,6 @@
 mod vectors;
 mod ray;
+mod shape;
 
 use vectors::Vec3;
 use ray::Ray;

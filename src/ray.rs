@@ -1,4 +1,4 @@
-use num::traits::{Float, int};
+use num::traits::Float;
 
 use crate::vectors::Vec3;
 use crate::vectors::Color;

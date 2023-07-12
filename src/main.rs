@@ -1,15 +1,30 @@
 mod vectors;
 mod ray;
 mod shape;
+mod scene;
 
 use vectors::Vec3;
 use ray::Ray;
+use shape::{Hittable, Sphere};
+use scene::Scene;
 
 fn main() {
     // Image
     let aspect_ratio = 16.0 / 9.0;
     let image_width = 400;
     let image_height = ((image_width as f64) / aspect_ratio) as i32;
+
+    // Scene
+    let mut objects: Vec<Box<dyn Hittable<f64>>> = Vec::new();
+    objects.push(Box::new(Sphere::new(
+                Vec3::new(0.0, 0.0, -1.0),
+                0.5
+    )));
+    objects.push(Box::new(Sphere::new(
+                Vec3::new(0.0, -100.5, -1.0),
+                100.0
+    )));
+    let scene = Scene::new(objects);
 
     // Camera
     let viewport_height = 2.0;
@@ -35,7 +50,7 @@ fn main() {
                 lower_left_corner + horizontal*u + vertical*v - origin
                 );
 
-            let pixel_color = r.color();
+            let pixel_color = r.color(&scene);
             println!(
                 "{} {} {}",
                 pixel_color.x,

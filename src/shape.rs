@@ -7,10 +7,10 @@ use num::traits::Float;
 
 #[derive(Copy, Clone, Debug)]
 pub struct HitRecord<T: Float> {
-    point: Vec3<T>,
-    normal: Vec3<T>,
-    t: T,
-    front_face: bool,
+    pub point: Vec3<T>,
+    pub normal: Vec3<T>,
+    pub t: T,
+    pub front_face: bool,
 }
 
 pub trait Hittable<T: Float> {

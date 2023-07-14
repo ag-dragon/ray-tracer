@@ -1,7 +1,7 @@
 use crate::vectors::Vec3;
 use crate::vectors::Color;
 use crate::scene::Scene;
-use crate::shape::{Hittable, Sphere};
+use crate::shape::Hittable;
 
 use num::traits::Float;
 
@@ -20,27 +20,19 @@ impl<T: Float> Ray<T> {
         self.origin + (self.direction*t)
     }
 
-    pub fn color(&self, scene: &Scene<T>) -> Color {
+    pub fn color(&self, scene: &Scene<T>) -> Color<T> {
         if let Some(hit_record) = scene.hit(self, (T::from(0.0).unwrap(), T::from(2.0).unwrap())) {
             let mut n = hit_record.normal;
             n += Vec3::<T>::one();
             n *= T::from(0.5).unwrap();
-            return Color::new(
-                num::cast(n.x * T::from(255.999).unwrap()).unwrap(),
-                num::cast(n.y * T::from(255.999).unwrap()).unwrap(),
-                num::cast(n.z * T::from(255.999).unwrap()).unwrap()
-                )
+            return n
         }
         let unit_direction = self.direction.normalized();
         let t: f64 = num::cast((unit_direction.y + T::from(1.0).unwrap()) * T::from(0.5).unwrap()).unwrap();
 
-        let res = Vec3::<T>::one()*(T::from(1.0).unwrap() - T::from(t).unwrap())
-            + Vec3::new(T::from(0.5).unwrap(), T::from(0.7).unwrap(), T::from(1.0).unwrap())*T::from(t).unwrap();
-        Color::new(
-            num::cast(res.x * T::from(255.999).unwrap()).unwrap(),
-            num::cast(res.y * T::from(255.999).unwrap()).unwrap(),
-            num::cast(res.z * T::from(255.999).unwrap()).unwrap()
-        )
+        Vec3::<T>::one()*(T::from(1.0).unwrap() - T::from(t).unwrap())
+            + Vec3::new(T::from(0.5).unwrap(), T::from(0.7).unwrap(),
+            T::from(1.0).unwrap())*T::from(t).unwrap()
     }
 }
 

@@ -60,9 +60,9 @@ fn main() {
             pixel_color_sum.z *= scale;
 
             let pixel_color: Color<i32> = Color::new(
-                num::cast(256.0 * clamp(pixel_color_sum.x, 0.0, 0.999)).unwrap(),
-                num::cast(256.0 * clamp(pixel_color_sum.y, 0.0, 0.999)).unwrap(),
-                num::cast(256.0 * clamp(pixel_color_sum.z, 0.0, 0.999)).unwrap(),
+                num::cast(256.0 * clamp(pixel_color_sum.x.sqrt(), 0.0, 0.999)).unwrap(),
+                num::cast(256.0 * clamp(pixel_color_sum.y.sqrt(), 0.0, 0.999)).unwrap(),
+                num::cast(256.0 * clamp(pixel_color_sum.z.sqrt(), 0.0, 0.999)).unwrap(),
             );
 
             println!(

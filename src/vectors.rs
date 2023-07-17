@@ -1,4 +1,7 @@
 use num::traits::{Float, Num};
+use rand::{thread_rng, Rng};
+use rand::prelude::Distribution;
+use rand::distributions::Standard;
 use std::ops::{
     Add, AddAssign,
     Div, DivAssign,
@@ -37,6 +40,16 @@ impl<T: Num + Copy> Vec3<T> {
             x: T::one(),
             y: T::one(),
             z: T::one(),
+        }
+    }
+
+    // Returns random vec3 with range from 0..1
+    pub fn random() -> Self where Standard: Distribution<T> {
+        let mut rng = thread_rng();
+        Self {
+            x: rng.gen(),
+            y: rng.gen(),
+            z: rng.gen()
         }
     }
 

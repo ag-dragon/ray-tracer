@@ -44,7 +44,8 @@ impl<T: Num + Copy> Vec3<T> {
         }
     }
 
-    // Returns random vec3 with range from 0..1
+    // Returns random vec3 over distribution
+    // (see rand distribution documentaiton)
     pub fn random() -> Self where
         Standard: Distribution<T> {
         let mut rng = thread_rng();
@@ -64,6 +65,20 @@ impl<T: Num + Copy> Vec3<T> {
             x: rng.gen_range(min..max),
             y: rng.gen_range(min..max),
             z: rng.gen_range(min..max)
+        }
+    }
+
+    pub fn random_in_unit_sphere() -> Self where 
+        Standard: Distribution<T>,
+        T: PartialOrd + SampleUniform + Neg<Output = T> {
+        loop {
+            let p = Vec3::<T>::random_range(
+                -T::one(),
+                T::one()
+            );
+            if p.length_squared() < T::one() {
+                return p;
+            }
         }
     }
 

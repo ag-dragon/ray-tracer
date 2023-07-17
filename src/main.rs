@@ -19,6 +19,7 @@ fn main() {
     let image_width = 800;
     let image_height = ((image_width as f64) / aspect_ratio) as i32;
     let samples_per_pixel = 100;
+    let max_depth = 50;
 
     // Scene
     let mut objects: Vec<Box<dyn Hittable<f64>>> = Vec::new();
@@ -50,7 +51,7 @@ fn main() {
                 let u = (i as f64 + rng.gen_range(0.0..1.0)) / ((image_width as f64) - 1.0);
                 let v = (j as f64 + rng.gen_range(0.0..1.0)) / ((image_height as f64) - 1.0);
                 let r = cam.get_ray(u, v);
-                pixel_color_sum += r.color(&scene);
+                pixel_color_sum += r.color(&scene, max_depth);
             }
 
             let scale = 1.0 / samples_per_pixel as f64;

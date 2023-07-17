@@ -4,6 +4,9 @@ use crate::scene::Scene;
 use crate::shape::Hittable;
 
 use num::traits::Float;
+use std::cmp::PartialOrd;
+use rand::prelude::Distribution;
+use rand::distributions::{Standard, uniform::SampleUniform};
 
 #[derive(Copy, Clone, Debug)]
 pub struct Ray<T: Float> {
@@ -20,12 +23,16 @@ impl<T: Float> Ray<T> {
         self.origin + (self.direction*t)
     }
 
-    pub fn color(&self, scene: &Scene<T>) -> Color<T> {
+    pub fn color(&self, scene: &Scene<T>, depth: i32) -> Color<T> where
+        Standard: Distribution<T>,
+        T: PartialOrd + SampleUniform {
+        if (depth <= 0) {
+            return Vec3::<T>::zero();
+        }
+
         if let Some(hit_record) = scene.hit(self, (T::from(0.0).unwrap(), T::from(2.0).unwrap())) {
-            let mut n = hit_record.normal;
-            n += Vec3::<T>::one();
-            n *= T::from(0.5).unwrap();
-            return n
+            let target = hit_record.point + hit_record.normal + Vec3::<T>::random_in_unit_sphere();
+            return Ray::new(hit_record.point, target - hit_record.point).color(scene, depth-1) * T::from(0.5).unwrap();
         }
         let unit_direction = self.direction.normalized();
         let t: f64 = num::cast((unit_direction.y + T::from(1.0).unwrap()) * T::from(0.5).unwrap()).unwrap();

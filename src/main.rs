@@ -5,7 +5,6 @@ mod camera;
 mod scene;
 
 use vectors::{Vec3, Color};
-use ray::Ray;
 use shape::{Hittable, Sphere};
 use camera::Camera;
 use scene::Scene;
@@ -47,7 +46,7 @@ fn main() {
         eprintln!("Scanelines remaining: {j}");
         for i in 0..image_width {
             let mut pixel_color_sum = Vec3::zero();
-            for s in 0..samples_per_pixel {
+            for _s in 0..samples_per_pixel {
                 let u = (i as f64 + rng.gen_range(0.0..1.0)) / ((image_width as f64) - 1.0);
                 let v = (j as f64 + rng.gen_range(0.0..1.0)) / ((image_height as f64) - 1.0);
                 let r = cam.get_ray(u, v);

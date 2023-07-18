@@ -82,6 +82,13 @@ impl<T: Num + Copy> Vec3<T> {
         }
     }
 
+    pub fn random_unit() -> Self where
+        Standard: Distribution<T>,
+        T: PartialOrd + SampleUniform
+            + Neg<Output = T>  + Float {
+        Vec3::<T>::random_in_unit_sphere().normalized()
+    }
+
     #[inline(always)]
     pub fn length(self) -> T where
         T: Float {

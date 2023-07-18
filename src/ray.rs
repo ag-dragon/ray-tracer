@@ -26,12 +26,12 @@ impl<T: Float> Ray<T> {
     pub fn color(&self, scene: &Scene<T>, depth: i32) -> Color<T> where
         Standard: Distribution<T>,
         T: PartialOrd + SampleUniform {
-        if (depth <= 0) {
+        if depth <= 0 {
             return Vec3::<T>::zero();
         }
 
-        if let Some(hit_record) = scene.hit(self, (T::from(0.0).unwrap(), T::from(2.0).unwrap())) {
-            let target = hit_record.point + hit_record.normal + Vec3::<T>::random_in_unit_sphere();
+        if let Some(hit_record) = scene.hit(self, (T::from(0.001).unwrap(), T::from(f64::INFINITY).unwrap())) {
+            let target = hit_record.point + hit_record.normal + Vec3::<T>::random_unit();
             return Ray::new(hit_record.point, target - hit_record.point).color(scene, depth-1) * T::from(0.5).unwrap();
         }
         let unit_direction = self.direction.normalized();

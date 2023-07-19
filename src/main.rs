@@ -25,8 +25,8 @@ fn main() {
     // Scene
     let mat_ground = Lambertian { albedo: Color::new(0.8, 0.8, 0.0) };
     let mat_center = Lambertian { albedo: Color::new(0.1, 0.2, 0.5) };
-    //let mat_left = Metal { albedo: Color::new(0.8, 0.8, 0.8), fuzz: 0.3 };
-    let mat_left = Dielectric { ir: 1.5 };
+    let mat_left_in = Dielectric { ir: 1.5 };
+    let mat_left_out = Dielectric { ir: 1.5 };
     let mat_right = Metal { albedo: Color::new(0.8, 0.6, 0.2), fuzz: 0.0 };
 
     let mut objects: Vec<Box<dyn Hittable>> = Vec::new();
@@ -43,7 +43,12 @@ fn main() {
     objects.push(Box::new(Sphere::new(
                 Vec3::new(-1.0, 0.0, -1.0),
                 0.5,
-                mat_left
+                mat_left_in
+    )));
+    objects.push(Box::new(Sphere::new(
+                Vec3::new(-1.0, 0.0, -1.0),
+                -0.45,
+                mat_left_out
     )));
     objects.push(Box::new(Sphere::new(
                 Vec3::new(1.0, 0.0, -1.0),

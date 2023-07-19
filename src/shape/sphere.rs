@@ -1,20 +1,24 @@
 use crate::shape::{HitRecord, Hittable};
 use crate::vectors::Vec3;
+use crate::vectors::Color;
 use crate::ray::Ray;
+use crate::material::Material;
+use crate::material::Lambertian;
 use num::traits::Float;
 
-pub struct Sphere<T: Float> {
-    center: Vec3<T>,
-    radius: T,
+pub struct Sphere<T: Float, M: Material<T>> {
+    pub center: Vec3<T>,
+    pub radius: T,
+    pub material: M,
 }
 
-impl<T: Float> Sphere<T> {
-    pub fn new(center: Vec3<T>, radius: T) -> Self {
-        Self { center, radius }
+impl<T: Float, M: Material<T>> Sphere<T, M> {
+    pub fn new(center: Vec3<T>, radius: T, material: M) -> Self {
+        Self { center, radius, material }
     }
 }
 
-impl<T: Float> Hittable<T> for Sphere<T> {
+impl<T: Float, M: Material<T>> Hittable<T> for Sphere<T, M> {
     fn hit(&self, ray: &Ray<T>, (t_min, t_max): (T, T)) -> Option<HitRecord<T>> {
         let oc = ray.origin - self.center;
         let a = ray.direction.length_squared();
@@ -39,6 +43,7 @@ impl<T: Float> Hittable<T> for Sphere<T> {
             return Some(HitRecord {
                 point: p,
                 normal: if front_face { outward_normal } else { -outward_normal },
+                material: &self.material,
                 t: root,
                 front_face,
             })
@@ -56,7 +61,10 @@ mod tests {
     fn test_new() {
         let s = Sphere::new(
             Vec3::new(1.0, 2.0, 3.0),
-            0.5
+            0.5,
+            Lambertian {
+                albedo: Color::new(0.5, 0.5, 0.5)
+            }
         );
 
         assert_eq!(s.center.x, 1.0);
@@ -69,7 +77,10 @@ mod tests {
     fn test_hit() {
         let s = Sphere::new(
             Vec3::new(0.0, 0.0, -1.0),
-            0.5
+            0.5,
+            Lambertian {
+                albedo: Color::new(0.5, 0.5, 0.5)
+            }
         );
         let r = Ray::new(
             Vec3::new(0.0, 0.0, 0.0),

@@ -3,11 +3,13 @@ mod ray;
 mod shape;
 mod camera;
 mod scene;
+mod material;
 
 use vectors::{Vec3, Color};
 use shape::{Hittable, Sphere};
 use camera::Camera;
 use scene::Scene;
+use material::Lambertian;
 
 use rand::{thread_rng, Rng};
 use num::clamp;
@@ -24,11 +26,17 @@ fn main() {
     let mut objects: Vec<Box<dyn Hittable<f64>>> = Vec::new();
     objects.push(Box::new(Sphere::new(
                 Vec3::new(0.0, 0.0, -1.0),
-                0.5
+                0.5,
+                Lambertian {
+                    albedo: Color::new(0.5, 1.0, 0.5)
+                }
     )));
     objects.push(Box::new(Sphere::new(
                 Vec3::new(0.0, -100.5, -1.0),
-                100.0
+                100.0,
+                Lambertian {
+                    albedo: Color::new(1.0, 0.5, 0.5)
+                }
     )));
     let scene = Scene::new(objects);
 

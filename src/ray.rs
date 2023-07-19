@@ -31,8 +31,11 @@ impl<T: Float> Ray<T> {
         }
 
         if let Some(hit_record) = scene.hit(self, (T::from(0.001).unwrap(), T::from(f64::INFINITY).unwrap())) {
-            let target = hit_record.point + hit_record.normal + Vec3::<T>::random_unit();
-            return Ray::new(hit_record.point, target - hit_record.point).color(scene, depth-1) * T::from(0.5).unwrap();
+            if let Some(scatter) = hit_record.material.scatter(&hit_record) {
+                return scatter.attenuation * scatter.scattered.color(scene, depth-1);
+            } else {
+                return Color::zero();
+            }
         }
         let unit_direction = self.direction.normalized();
         let t: f64 = num::cast((unit_direction.y + T::from(1.0).unwrap()) * T::from(0.5).unwrap()).unwrap();

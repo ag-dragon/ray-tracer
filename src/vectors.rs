@@ -89,6 +89,12 @@ impl<T: Num + Copy> Vec3<T> {
         Vec3::<T>::random_in_unit_sphere().normalized()
     }
 
+    pub fn near_zero(&self) -> bool where
+        T: Float {
+        let s = T::from(1e-8).unwrap();
+        self.x.abs() < s && self.y.abs() < s && self.z.abs() < s
+    }
+
     #[inline(always)]
     pub fn length(self) -> T where
         T: Float {

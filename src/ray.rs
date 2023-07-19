@@ -24,7 +24,7 @@ impl Ray {
         }
 
         if let Some(hit_record) = scene.hit(self, (0.001, f64::INFINITY)) {
-            if let Some(scatter) = hit_record.material.scatter(&hit_record) {
+            if let Some(scatter) = hit_record.material.scatter(self, &hit_record) {
                 return scatter.attenuation * scatter.scattered.color(scene, depth-1);
             } else {
                 return Color::zero();

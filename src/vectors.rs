@@ -95,6 +95,13 @@ impl<T: Num + Copy> Vec3<T> {
         self.x.abs() < s && self.y.abs() < s && self.z.abs() < s
     }
 
+    // Reflect vector across normalized vector n
+    #[inline(always)]
+    pub fn reflect(self, n: Vec3<T>) -> Vec3<T> where
+        T: Float {
+        self - n*self.dot(n)*T::from(2.0).unwrap()
+    }
+
     #[inline(always)]
     pub fn length(self) -> T where
         T: Float {

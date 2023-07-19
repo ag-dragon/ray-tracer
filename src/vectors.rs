@@ -95,12 +95,6 @@ impl<T: Num + Copy> Vec3<T> {
         self.x.abs() < s && self.y.abs() < s && self.z.abs() < s
     }
 
-    // Reflect vector across normalized vector n
-    #[inline(always)]
-    pub fn reflect(self, n: Vec3<T>) -> Vec3<T> where
-        T: Float {
-        self - n*self.dot(n)*T::from(2.0).unwrap()
-    }
 
     #[inline(always)]
     pub fn length(self) -> T where
@@ -131,6 +125,22 @@ impl<T: Num + Copy> Vec3<T> {
     pub fn normalized(self) -> Self where
         T: Float {
         self / self.length()
+    }
+}
+
+impl Vec3<f64> {
+    // Reflect vector across normalized vector n
+    #[inline(always)]
+    pub fn reflect(self, n: Vec3<f64>) -> Vec3<f64> {
+        self - n*self.dot(n)*2.0
+    }
+
+    #[inline(always)]
+    pub fn refract(self, n: Vec3<f64>, etai_over_etat: f64) -> Vec3<f64> {
+        let cos_theta = (-self).dot(n).min(1.0);
+        let r_out_perp = (self + n*cos_theta) * etai_over_etat;
+        let r_out_parallel = n * -((1.0 - r_out_perp.length_squared()).abs().sqrt());
+        return r_out_perp + r_out_parallel;
     }
 }
 

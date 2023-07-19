@@ -3,34 +3,27 @@ use crate::vectors::Color;
 use crate::scene::Scene;
 use crate::shape::Hittable;
 
-use num::traits::Float;
-use std::cmp::PartialOrd;
-use rand::prelude::Distribution;
-use rand::distributions::{Standard, uniform::SampleUniform};
-
 #[derive(Copy, Clone, Debug)]
-pub struct Ray<T: Float> {
-    pub origin: Vec3<T>,
-    pub direction: Vec3<T>,
+pub struct Ray {
+    pub origin: Vec3<f64>,
+    pub direction: Vec3<f64>,
 }
 
-impl<T: Float> Ray<T> {
-    pub fn new(origin: Vec3<T>, direction: Vec3<T>) -> Self {
+impl Ray {
+    pub fn new(origin: Vec3<f64>, direction: Vec3<f64>) -> Self {
         Self { origin, direction }
     }
 
-    pub fn at(&self, t: T) -> Vec3<T> {
+    pub fn at(&self, t: f64) -> Vec3<f64> {
         self.origin + (self.direction*t)
     }
 
-    pub fn color(&self, scene: &Scene<T>, depth: i32) -> Color<T> where
-        Standard: Distribution<T>,
-        T: PartialOrd + SampleUniform {
+    pub fn color(&self, scene: &Scene, depth: i32) -> Color {
         if depth <= 0 {
-            return Vec3::<T>::zero();
+            return Color::zero();
         }
 
-        if let Some(hit_record) = scene.hit(self, (T::from(0.001).unwrap(), T::from(f64::INFINITY).unwrap())) {
+        if let Some(hit_record) = scene.hit(self, (0.001, f64::INFINITY)) {
             if let Some(scatter) = hit_record.material.scatter(&hit_record) {
                 return scatter.attenuation * scatter.scattered.color(scene, depth-1);
             } else {
@@ -38,11 +31,9 @@ impl<T: Float> Ray<T> {
             }
         }
         let unit_direction = self.direction.normalized();
-        let t: f64 = num::cast((unit_direction.y + T::from(1.0).unwrap()) * T::from(0.5).unwrap()).unwrap();
+        let t = (unit_direction.y + 1.0) * 0.5;
 
-        Vec3::<T>::one()*(T::from(1.0).unwrap() - T::from(t).unwrap())
-            + Vec3::new(T::from(0.5).unwrap(), T::from(0.7).unwrap(),
-            T::from(1.0).unwrap())*T::from(t).unwrap()
+        Color::one()*(1.0 - t) + Color::new(0.5, 0.7, 1.0) * t
     }
 }
 

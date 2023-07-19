@@ -1,19 +1,18 @@
 use crate::shape::{Hittable, HitRecord};
 use crate::ray::Ray;
-use num::traits::Float;
 
-pub struct Scene<T> {
-    pub objects: Vec<Box<dyn Hittable<T>>>,
+pub struct Scene {
+    pub objects: Vec<Box<dyn Hittable>>,
 }
 
-impl<T: Float> Scene<T> {
-    pub fn new(objects: Vec<Box<dyn Hittable<T>>>) -> Self {
+impl Scene {
+    pub fn new(objects: Vec<Box<dyn Hittable>>) -> Self {
         Self { objects }
     }
 }
 
-impl<T: Float> Hittable<T> for Scene<T> {
-    fn hit(&self, ray: &Ray<T>, (t_min, t_max): (T, T)) -> Option<HitRecord<T>> {
+impl Hittable for Scene {
+    fn hit(&self, ray: &Ray, (t_min, t_max): (f64, f64)) -> Option<HitRecord> {
         let mut result = None;
         let mut closest_so_far = t_max;
 

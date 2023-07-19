@@ -23,7 +23,7 @@ fn main() {
     let max_depth = 50;
 
     // Scene
-    let mut objects: Vec<Box<dyn Hittable<f64>>> = Vec::new();
+    let mut objects: Vec<Box<dyn Hittable>> = Vec::new();
     objects.push(Box::new(Sphere::new(
                 Vec3::new(0.0, 0.0, -1.0),
                 0.5,
@@ -66,17 +66,11 @@ fn main() {
             pixel_color_sum.y *= scale;
             pixel_color_sum.z *= scale;
 
-            let pixel_color: Color<i32> = Color::new(
-                num::cast(256.0 * clamp(pixel_color_sum.x.sqrt(), 0.0, 0.999)).unwrap(),
-                num::cast(256.0 * clamp(pixel_color_sum.y.sqrt(), 0.0, 0.999)).unwrap(),
-                num::cast(256.0 * clamp(pixel_color_sum.z.sqrt(), 0.0, 0.999)).unwrap(),
-            );
-
             println!(
                 "{} {} {}",
-                pixel_color.x,
-                pixel_color.y,
-                pixel_color.z
+                (256.0 * clamp(pixel_color_sum.x.sqrt(), 0.0, 0.999)) as u8,
+                (256.0 * clamp(pixel_color_sum.y.sqrt(), 0.0, 0.999)) as u8,
+                (256.0 * clamp(pixel_color_sum.z.sqrt(), 0.0, 0.999)) as u8
             );
         }
     }

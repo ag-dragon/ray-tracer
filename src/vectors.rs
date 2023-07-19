@@ -11,7 +11,7 @@ use std::ops::{
     Sub, SubAssign,
 };
 
-pub type Color<T> = Vec3<T>;
+pub type Color = Vec3<f64>;
 
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub struct Vec3<T: Num + Copy> {

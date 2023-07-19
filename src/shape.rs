@@ -4,18 +4,16 @@ pub use self::sphere::Sphere;
 use crate::material::Material;
 use crate::vectors::Vec3;
 use crate::ray::Ray;
-use num::traits::Float;
-use std::rc::Rc;
 
 #[derive(Copy, Clone)]
-pub struct HitRecord<'material, T: Float> {
-    pub point: Vec3<T>,
-    pub normal: Vec3<T>,
-    pub material: &'material dyn Material<T>,
-    pub t: T,
+pub struct HitRecord<'material> {
+    pub point: Vec3<f64>,
+    pub normal: Vec3<f64>,
+    pub material: &'material dyn Material,
+    pub t: f64,
     pub front_face: bool,
 }
 
-pub trait Hittable<T: Float> {
-    fn hit(&self, ray: &Ray<T>, t_range: (T, T)) -> Option<HitRecord<T>>;
+pub trait Hittable {
+    fn hit(&self, ray: &Ray, t_range: (f64, f64)) -> Option<HitRecord>;
 }

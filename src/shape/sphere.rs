@@ -4,22 +4,21 @@ use crate::vectors::Color;
 use crate::ray::Ray;
 use crate::material::Material;
 use crate::material::Lambertian;
-use num::traits::Float;
 
-pub struct Sphere<T: Float, M: Material<T>> {
-    pub center: Vec3<T>,
-    pub radius: T,
+pub struct Sphere<M: Material> {
+    pub center: Vec3<f64>,
+    pub radius: f64,
     pub material: M,
 }
 
-impl<T: Float, M: Material<T>> Sphere<T, M> {
-    pub fn new(center: Vec3<T>, radius: T, material: M) -> Self {
+impl<M: Material> Sphere<M> {
+    pub fn new(center: Vec3<f64>, radius: f64, material: M) -> Self {
         Self { center, radius, material }
     }
 }
 
-impl<T: Float, M: Material<T>> Hittable<T> for Sphere<T, M> {
-    fn hit(&self, ray: &Ray<T>, (t_min, t_max): (T, T)) -> Option<HitRecord<T>> {
+impl<M: Material> Hittable for Sphere<M> {
+    fn hit(&self, ray: &Ray, (t_min, t_max): (f64, f64)) -> Option<HitRecord> {
         let oc = ray.origin - self.center;
         let a = ray.direction.length_squared();
         let half_b = oc.dot(ray.direction);
@@ -28,7 +27,7 @@ impl<T: Float, M: Material<T>> Hittable<T> for Sphere<T, M> {
         let discriminant = half_b*half_b - a*c;
         let sqrtd = discriminant.sqrt();
 
-        if discriminant >= T::zero() {
+        if discriminant >= 0.0 {
             let mut root = (-half_b - sqrtd) / a;
             if root < t_min || t_max < root {
                 root = (-half_b + sqrtd) / a;
@@ -39,7 +38,7 @@ impl<T: Float, M: Material<T>> Hittable<T> for Sphere<T, M> {
 
             let p = ray.at(root);
             let outward_normal = (p - self.center) / self.radius;
-            let front_face = ray.direction.dot(outward_normal) < T::zero();
+            let front_face = ray.direction.dot(outward_normal) < 0.0;
             return Some(HitRecord {
                 point: p,
                 normal: if front_face { outward_normal } else { -outward_normal },

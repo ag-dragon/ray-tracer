@@ -25,8 +25,8 @@ fn main() {
     // Scene
     let mat_ground = Lambertian { albedo: Color::new(0.8, 0.8, 0.0) };
     let mat_center = Lambertian { albedo: Color::new(0.7, 0.3, 0.3) };
-    let mat_left = Metal { albedo: Color::new(0.8, 0.8, 0.8) };
-    let mat_right = Metal { albedo: Color::new(0.8, 0.6, 0.2) };
+    let mat_left = Metal { albedo: Color::new(0.8, 0.8, 0.8), fuzz: 0.3 };
+    let mat_right = Metal { albedo: Color::new(0.8, 0.6, 0.2), fuzz: 1.0 };
 
     let mut objects: Vec<Box<dyn Hittable>> = Vec::new();
     objects.push(Box::new(Sphere::new(

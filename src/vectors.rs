@@ -142,6 +142,16 @@ impl Vec3<f64> {
         let r_out_parallel = n * -((1.0 - r_out_perp.length_squared()).abs().sqrt());
         return r_out_perp + r_out_parallel;
     }
+
+    pub fn random_in_unit_disk() -> Self {
+        loop {
+            let mut p = Vec3::<f64>::zero();
+            let mut rng = thread_rng();
+            p.x += rng.gen_range(-1.0..1.0);
+            p.y += rng.gen_range(-1.0..1.0);
+            return p;
+        }
+    }
 }
 
 impl<T: Num + Copy> Add<Vec3<T>> for Vec3<T> {

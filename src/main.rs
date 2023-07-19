@@ -58,7 +58,7 @@ fn main() {
     let scene = Scene::new(objects);
 
     // Camera
-    let cam = Camera::new();
+    let cam = Camera::new(90.0, aspect_ratio);
 
     // rng
     let mut rng = thread_rng();

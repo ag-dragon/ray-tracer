@@ -24,8 +24,6 @@ impl Camera {
         let u = vup.cross(w).normalized();
         let v = w.cross(u);
 
-        let focal_length = 1.0;
-
         let origin = lookfrom;
         let horizontal = u * viewport_width * focus_dist;
         let vertical = v * viewport_height * focus_dist;

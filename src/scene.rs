@@ -1,3 +1,4 @@
+pub mod weekend;
 use crate::shape::{Hittable, HitRecord};
 use crate::ray::Ray;
 

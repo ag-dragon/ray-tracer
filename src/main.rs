@@ -5,61 +5,29 @@ mod camera;
 mod scene;
 mod material;
 
-use vectors::{Vec3, Color};
-use shape::{Hittable, Sphere};
+use vectors::Vec3;
 use camera::Camera;
-use scene::Scene;
-use material::{Lambertian, Metal, Dielectric};
 
 use rand::{thread_rng, Rng};
 use num::clamp;
 
 fn main() {
     // Image
-    let aspect_ratio = 16.0 / 9.0;
-    let image_width = 800;
+    let aspect_ratio = 3.0 / 2.0;
+    let image_width = 400;
     let image_height = ((image_width as f64) / aspect_ratio) as i32;
     let samples_per_pixel = 100;
     let max_depth = 50;
 
-    // Scene
-    let mat_ground = Lambertian { albedo: Color::new(0.8, 0.8, 0.0) };
-    let mat_center = Lambertian { albedo: Color::new(0.1, 0.2, 0.5) };
-    let mat_left_in = Dielectric { ir: 1.5 };
-    let mat_left_out = Dielectric { ir: 1.5 };
-    let mat_right = Metal { albedo: Color::new(0.8, 0.6, 0.2), fuzz: 0.0 };
+    // rng
+    let mut rng = thread_rng();
 
-    let mut objects: Vec<Box<dyn Hittable>> = Vec::new();
-    objects.push(Box::new(Sphere::new(
-                Vec3::new(0.0, -100.5, -1.0),
-                100.0,
-                mat_ground
-    )));
-    objects.push(Box::new(Sphere::new(
-                Vec3::new(0.0, 0.0, -1.0),
-                0.5,
-                mat_center
-    )));
-    objects.push(Box::new(Sphere::new(
-                Vec3::new(-1.0, 0.0, -1.0),
-                0.5,
-                mat_left_in
-    )));
-    objects.push(Box::new(Sphere::new(
-                Vec3::new(-1.0, 0.0, -1.0),
-                -0.45,
-                mat_left_out
-    )));
-    objects.push(Box::new(Sphere::new(
-                Vec3::new(1.0, 0.0, -1.0),
-                0.5,
-                mat_right
-    )));
-    let scene = Scene::new(objects);
+    // Scene
+    let scene = scene::weekend::gen_scene();
 
     // Camera
-    let lookfrom = Vec3::new(3.0, 3.0, 2.0);
-    let lookat = Vec3::new(0.0, 0.0, -1.0);
+    let lookfrom = Vec3::new(13.0, 2.0, 3.0);
+    let lookat = Vec3::new(0.0, 0.0, 0.0);
     let vup = Vec3::new(0.0, 1.0, 0.0);
     let cam = Camera::new(
         lookfrom,
@@ -67,13 +35,9 @@ fn main() {
         vup,
         20.0,
         aspect_ratio,
-        2.0,
-        (lookfrom-lookat).length()
-
+        0.1,
+        10.0
     );
-
-    // rng
-    let mut rng = thread_rng();
 
     println!("P3");
     println!("{image_width} {image_height}");

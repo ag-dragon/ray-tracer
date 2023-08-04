@@ -2,6 +2,8 @@
 name = "ray-tracer"
 version = "0.1.0"
 edition = "2021"
+description = "A simple ray tracer implemented in rust"
+repossitory = "https://github.com/ag-dragon/ray-tracer"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -10,3 +12,4 @@ num = "0.3"
 rand = "0.8.5"
 rayon = "1.7.0"
 image = "0.24.6"
+clap = { version = "4.3.19", features = ["derive"] }

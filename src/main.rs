@@ -13,18 +13,34 @@ use num::clamp;
 use rayon::prelude::*;
 
 use std::time::Instant;
-use std::env;
+use clap::Parser;
+
+#[derive(Parser)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    #[arg(short, long, default_value_t = String::from("images/image.png"))]
+    file_path: String,
+
+    #[arg(short, long, default_value_t = 400)]
+    image_width: i32,
+
+    #[arg(short, long, default_value_t = 50)]
+    samples_per_pixel: i32,
+
+    #[arg(short, long, default_value_t = 5)]
+    max_depth: i32,
+}
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    let file_path = &args[1];
+    let args = Args::parse();
+    let file_path = args.file_path;
 
     // Image
     let aspect_ratio = 3.0 / 2.0;
-    let image_width = 400;
+    let image_width = args.image_width;
     let image_height = ((image_width as f64) / aspect_ratio) as i32;
-    let samples_per_pixel = 50;
-    let max_depth = 5;
+    let samples_per_pixel = args.samples_per_pixel;
+    let max_depth = args.max_depth;
 
     // Scene
     let scene = scene::weekend::gen_scene();

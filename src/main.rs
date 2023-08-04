@@ -10,17 +10,17 @@ use camera::Camera;
 
 use rand::{thread_rng, Rng};
 use num::clamp;
+use rayon::prelude::*;
+
+use std::time::Instant;
 
 fn main() {
     // Image
     let aspect_ratio = 3.0 / 2.0;
     let image_width = 400;
     let image_height = ((image_width as f64) / aspect_ratio) as i32;
-    let samples_per_pixel = 100;
-    let max_depth = 50;
-
-    // rng
-    let mut rng = thread_rng();
+    let samples_per_pixel = 50;
+    let max_depth = 5;
 
     // Scene
     let scene = scene::weekend::gen_scene();
@@ -44,9 +44,12 @@ fn main() {
     println!("255");
 
     let mut image_buffer = vec![Color::zero(); (image_width * image_height) as usize];
+    let rows: Vec<(usize, &mut [Color])> = image_buffer.chunks_mut(image_width as usize).enumerate().collect();
 
-    for j in 0..image_height {
-        eprintln!("Scanelines remaining: {}", image_height-j);
+    let start = Instant::now();
+    rows.into_par_iter().for_each(|(j, row)| {
+        let mut rng = thread_rng();
+        eprintln!("Starting row {}", j);
         for i in 0..image_width {
             let mut pixel_color_sum = Vec3::zero();
             for _s in 0..samples_per_pixel {
@@ -62,11 +65,13 @@ fn main() {
             pixel_color_sum.z *= scale;
 
 
-            image_buffer[((j*image_width)+i) as usize].x = pixel_color_sum.x.sqrt();
-            image_buffer[((j*image_width)+i) as usize].y = pixel_color_sum.y.sqrt();
-            image_buffer[((j*image_width)+i) as usize].z = pixel_color_sum.z.sqrt();
+            row[i as usize].x = pixel_color_sum.x.sqrt();
+            row[i as usize].y = pixel_color_sum.y.sqrt();
+            row[i as usize].z = pixel_color_sum.z.sqrt();
         }
-    }
+        eprintln!("Finished row {}", j);
+    });
+    eprintln!("Time elapsed: {}ms", start.elapsed().as_millis());
 
     for j in (0..image_height).rev() {
         for i in 0..image_width {

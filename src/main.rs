@@ -5,7 +5,7 @@ mod camera;
 mod scene;
 mod material;
 
-use vectors::Vec3;
+use vectors::{Vec3, Color};
 use camera::Camera;
 
 use rand::{thread_rng, Rng};
@@ -43,8 +43,10 @@ fn main() {
     println!("{image_width} {image_height}");
     println!("255");
 
-    for j in (0..image_height).rev() {
-        eprintln!("Scanelines remaining: {j}");
+    let mut image_buffer = vec![Color::zero(); (image_width * image_height) as usize];
+
+    for j in 0..image_height {
+        eprintln!("Scanelines remaining: {}", image_height-j);
         for i in 0..image_width {
             let mut pixel_color_sum = Vec3::zero();
             for _s in 0..samples_per_pixel {
@@ -59,11 +61,20 @@ fn main() {
             pixel_color_sum.y *= scale;
             pixel_color_sum.z *= scale;
 
+
+            image_buffer[((j*image_width)+i) as usize].x = pixel_color_sum.x.sqrt();
+            image_buffer[((j*image_width)+i) as usize].y = pixel_color_sum.y.sqrt();
+            image_buffer[((j*image_width)+i) as usize].z = pixel_color_sum.z.sqrt();
+        }
+    }
+
+    for j in (0..image_height).rev() {
+        for i in 0..image_width {
             println!(
                 "{} {} {}",
-                (256.0 * clamp(pixel_color_sum.x.sqrt(), 0.0, 0.999)) as u8,
-                (256.0 * clamp(pixel_color_sum.y.sqrt(), 0.0, 0.999)) as u8,
-                (256.0 * clamp(pixel_color_sum.z.sqrt(), 0.0, 0.999)) as u8
+                (256.0 * clamp(image_buffer[((j*image_width)+i) as usize].x, 0.0, 0.999)) as u8,
+                (256.0 * clamp(image_buffer[((j*image_width)+i) as usize].y, 0.0, 0.999)) as u8,
+                (256.0 * clamp(image_buffer[((j*image_width)+i) as usize].z, 0.0, 0.999)) as u8
             );
         }
     }

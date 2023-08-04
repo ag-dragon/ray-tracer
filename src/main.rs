@@ -39,17 +39,13 @@ fn main() {
         10.0
     );
 
-    println!("P3");
-    println!("{image_width} {image_height}");
-    println!("255");
-
-    let mut image_buffer = vec![Color::zero(); (image_width * image_height) as usize];
-    let rows: Vec<(usize, &mut [Color])> = image_buffer.chunks_mut(image_width as usize).enumerate().collect();
+    let mut image_buffer: Vec<u8> = vec![0; (image_width * image_height * 3) as usize];
+    let rows: Vec<(usize, &mut [u8])> = image_buffer.chunks_mut((image_width * 3) as usize).rev().enumerate().collect();
 
     let start = Instant::now();
     rows.into_par_iter().for_each(|(j, row)| {
         let mut rng = thread_rng();
-        eprintln!("Starting row {}", j);
+        println!("Starting row {}", j);
         for i in 0..image_width {
             let mut pixel_color_sum = Vec3::zero();
             for _s in 0..samples_per_pixel {
@@ -65,24 +61,15 @@ fn main() {
             pixel_color_sum.z *= scale;
 
 
-            row[i as usize].x = pixel_color_sum.x.sqrt();
-            row[i as usize].y = pixel_color_sum.y.sqrt();
-            row[i as usize].z = pixel_color_sum.z.sqrt();
+            row[((i*3)+0) as usize] = (256.0 * clamp(pixel_color_sum.x.sqrt(), 0.0, 0.999)) as u8;
+            row[((i*3)+1) as usize] = (256.0 * clamp(pixel_color_sum.y.sqrt(), 0.0, 0.999)) as u8;
+            row[((i*3)+2) as usize] = (256.0 * clamp(pixel_color_sum.z.sqrt(), 0.0, 0.999)) as u8;
         }
-        eprintln!("Finished row {}", j);
+        println!("Finished row {}", j);
     });
-    eprintln!("Time elapsed: {}ms", start.elapsed().as_millis());
+    println!("Time elapsed: {}ms", start.elapsed().as_millis());
 
-    for j in (0..image_height).rev() {
-        for i in 0..image_width {
-            println!(
-                "{} {} {}",
-                (256.0 * clamp(image_buffer[((j*image_width)+i) as usize].x, 0.0, 0.999)) as u8,
-                (256.0 * clamp(image_buffer[((j*image_width)+i) as usize].y, 0.0, 0.999)) as u8,
-                (256.0 * clamp(image_buffer[((j*image_width)+i) as usize].z, 0.0, 0.999)) as u8
-            );
-        }
-    }
+    image::save_buffer("image.png", &image_buffer[..], image_width as u32, image_height as u32, image::ColorType::Rgb8);
 
-    eprintln!("Done!");
+    println!("Done!");
 }

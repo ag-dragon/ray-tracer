@@ -14,22 +14,8 @@ use num::clamp;
 use rayon::prelude::*;
 
 pub fn render(scene: &Scene, image_width: i32, samples_per_pixel: i32, max_depth: i32) -> Vec<u8> {
-    let aspect_ratio = 3.0 / 2.0;
-    let image_height = ((image_width as f64) / aspect_ratio) as i32;
-
-    // Camera
-    let lookfrom = Vec3::new(13.0, 2.0, 3.0);
-    let lookat = Vec3::new(0.0, 0.0, 0.0);
-    let vup = Vec3::new(0.0, 1.0, 0.0);
-    let cam = Camera::new(
-        lookfrom,
-        lookat,
-        vup,
-        20.0,
-        aspect_ratio,
-        0.1,
-        10.0
-    );
+    let cam = &scene.camera;
+    let image_height = ((image_width as f64) / cam.aspect_ratio) as i32;
 
     let mut image_buffer: Vec<u8> = vec![0; (image_width * image_height * 3) as usize];
     let rows: Vec<(usize, &mut [u8])> = image_buffer.chunks_mut((image_width * 3) as usize).rev().enumerate().collect();

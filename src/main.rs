@@ -37,8 +37,7 @@ fn main() {
     println!("Time elapsed: {}ms", start.elapsed().as_millis());
 
     // TODO: get aspect_ratio from camera in scene
-    let aspect_ratio = 3.0 / 2.0;
-    let image_height = ((args.image_width as f64) / aspect_ratio) as i32;
+    let image_height = ((args.image_width as f64) / scene.camera.aspect_ratio) as i32;
 
     let result = image::save_buffer(
         file_path,

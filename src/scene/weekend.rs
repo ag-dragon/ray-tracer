@@ -2,11 +2,27 @@ use crate::scene::Scene;
 use crate::vectors::{Vec3, Color};
 use crate::material::{Lambertian, Metal, Dielectric};
 use crate::shape::{Hittable, Sphere};
+use crate::Camera;
 
 use rand::{thread_rng, Rng};
 
 pub fn gen_scene() -> Scene {
     let mut rng = thread_rng();
+
+    // Camera
+    let lookfrom = Vec3::new(13.0, 2.0, 3.0);
+    let lookat = Vec3::new(0.0, 0.0, 0.0);
+    let vup = Vec3::new(0.0, 1.0, 0.0);
+    let aspect_ratio = 3.0 / 2.0;
+    let cam = Camera::new(
+        lookfrom,
+        lookat,
+        vup,
+        20.0,
+        aspect_ratio,
+        0.1,
+        10.0
+    );
 
     let mut objects: Vec<Box<dyn Hittable>> = Vec::new();
     let mat_ground = Lambertian { albedo: Color::new(0.8, 0.8, 0.0) };
@@ -75,5 +91,5 @@ pub fn gen_scene() -> Scene {
             fuzz: 0.0
         }
     )));
-    Scene::new(objects)
+    Scene::new(cam, objects)
 }

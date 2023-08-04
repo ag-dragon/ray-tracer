@@ -1,14 +1,16 @@
 pub mod weekend;
 use crate::shape::{Hittable, HitRecord};
 use crate::ray::Ray;
+use crate::Camera;
 
 pub struct Scene {
+    pub camera: Camera,
     pub objects: Vec<Box<dyn Hittable>>,
 }
 
 impl Scene {
-    pub fn new(objects: Vec<Box<dyn Hittable>>) -> Self {
-        Self { objects }
+    pub fn new(camera: Camera, objects: Vec<Box<dyn Hittable>>) -> Self {
+        Self { camera, objects }
     }
 }
 

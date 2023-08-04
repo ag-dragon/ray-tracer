@@ -13,8 +13,12 @@ use num::clamp;
 use rayon::prelude::*;
 
 use std::time::Instant;
+use std::env;
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
+    let file_path = &args[1];
+
     // Image
     let aspect_ratio = 3.0 / 2.0;
     let image_width = 400;
@@ -69,7 +73,7 @@ fn main() {
     });
     println!("Time elapsed: {}ms", start.elapsed().as_millis());
 
-    image::save_buffer("image.png", &image_buffer[..], image_width as u32, image_height as u32, image::ColorType::Rgb8);
+    image::save_buffer(file_path, &image_buffer[..], image_width as u32, image_height as u32, image::ColorType::Rgb8);
 
     println!("Done!");
 }

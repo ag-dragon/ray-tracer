@@ -1,9 +1,7 @@
 use crate::shape::{HitRecord, Hittable};
 use crate::vectors::Vec3;
-use crate::vectors::Color;
 use crate::ray::Ray;
 use crate::material::Material;
-use crate::material::Lambertian;
 
 pub struct Sphere<M: Material> {
     pub center: Vec3<f64>,
@@ -55,6 +53,8 @@ impl<M: Material> Hittable for Sphere<M> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::vectors::Color;
+    use crate::material::Lambertian;
 
     #[test]
     fn test_new() {

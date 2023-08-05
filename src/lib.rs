@@ -4,6 +4,7 @@ pub mod shape;
 pub mod camera;
 pub mod scene;
 pub mod material;
+pub mod texture;
 
 use vectors::Vec3;
 use camera::Camera;
@@ -22,7 +23,7 @@ pub fn render(scene: &Scene, image_width: i32, samples_per_pixel: i32, max_depth
 
     rows.into_par_iter().for_each(|(j, row)| {
         let mut rng = thread_rng();
-        println!("Starting row {}", j);
+        println!("Started row {}", j);
         for i in 0..image_width {
             let mut pixel_color_sum = Vec3::zero();
             for _s in 0..samples_per_pixel {

@@ -25,7 +25,7 @@ fn main() {
     let start = Instant::now();
 
     // Scene
-    let scene = scene::weekend::gen_scene();
+    let scene = scene::triple_sphere::gen_scene();
 
     let image_buffer = rtir::render(
         &scene,
@@ -36,9 +36,7 @@ fn main() {
 
     println!("Time elapsed: {}ms", start.elapsed().as_millis());
 
-    // TODO: get aspect_ratio from camera in scene
     let image_height = ((args.image_width as f64) / scene.camera.aspect_ratio) as i32;
-
     let result = image::save_buffer(
         file_path,
         &image_buffer[..],
@@ -51,6 +49,5 @@ fn main() {
         Err(e) => eprintln!("Error saving image: {e:?}"),
         _ => (),
     }
-
     println!("Done!");
 }

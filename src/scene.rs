@@ -1,4 +1,5 @@
 pub mod weekend;
+pub mod triple_sphere;
 use crate::shape::{Hittable, HitRecord};
 use crate::ray::Ray;
 use crate::Camera;

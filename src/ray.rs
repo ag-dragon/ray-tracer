@@ -19,10 +19,12 @@ impl Ray {
     }
 
     pub fn color(&self, scene: &Scene, depth: i32) -> Color {
+        // Reached max depth
         if depth <= 0 {
             return Color::zero();
         }
 
+        // Check if ray hits any other objects in scene
         if let Some(hit_record) = scene.hit(self, (0.001, f64::INFINITY)) {
             if let Some(scatter) = hit_record.material.scatter(self, &hit_record) {
                 return scatter.attenuation * scatter.scattered.color(scene, depth-1);
@@ -30,6 +32,8 @@ impl Ray {
                 return Color::zero();
             }
         }
+
+        // Background color
         let unit_direction = self.direction.normalized();
         let t = (unit_direction.y + 1.0) * 0.5;
 

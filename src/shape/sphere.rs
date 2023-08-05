@@ -13,6 +13,13 @@ impl<M: Material> Sphere<M> {
     pub fn new(center: Vec3<f64>, radius: f64, material: M) -> Self {
         Self { center, radius, material }
     }
+
+    fn get_uv(p: Vec3<f64>) -> (f64, f64) {
+        let theta = (-p.y).acos();
+        let phi = (-p.z).atan2(p.x) + std::f64::consts::PI;
+
+        (phi / (2.0*std::f64::consts::PI), theta / std::f64::consts::PI)
+    }
 }
 
 impl<M: Material + Send + Sync> Hittable for Sphere<M> {
@@ -37,11 +44,14 @@ impl<M: Material + Send + Sync> Hittable for Sphere<M> {
             let p = ray.at(root);
             let outward_normal = (p - self.center) / self.radius;
             let front_face = ray.direction.dot(outward_normal) < 0.0;
+            let (u, v) = Sphere::<M>::get_uv(outward_normal);
             return Some(HitRecord {
                 point: p,
                 normal: if front_face { outward_normal } else { -outward_normal },
                 material: &self.material,
                 t: root,
+                u,
+                v,
                 front_face,
             })
         }

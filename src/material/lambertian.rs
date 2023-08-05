@@ -3,12 +3,13 @@ use crate::vectors::Color;
 use crate::vectors::Vec3;
 use crate::ray::Ray;
 use crate::shape::HitRecord;
+use crate::texture::Texture;
 
-pub struct Lambertian {
-    pub albedo: Color,
+pub struct Lambertian<T: Texture> {
+    pub albedo: T,
 }
 
-impl Material for Lambertian {
+impl<T: Texture> Material for Lambertian<T> {
     fn scatter(&self, _: &Ray, rec: &HitRecord) -> Option<Scatter> {
         let scatter_direction = rec.normal + Vec3::random_unit();
 
@@ -20,7 +21,7 @@ impl Material for Lambertian {
 
         Some( Scatter {
             scattered: Ray::new(rec.point, scatter_direction),
-            attenuation: self.albedo
+            attenuation: self.albedo.color(rec.u, rec.v, rec.point),
         })
     }
 }

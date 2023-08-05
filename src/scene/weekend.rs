@@ -1,6 +1,7 @@
 use crate::scene::Scene;
 use crate::vectors::{Vec3, Color};
 use crate::material::{Lambertian, Metal, Dielectric};
+use crate::texture::{SolidColor, Checker};
 use crate::shape::{Hittable, Sphere};
 use crate::Camera;
 
@@ -25,7 +26,11 @@ pub fn gen_scene() -> Scene {
     );
 
     let mut objects: Vec<Box<dyn Hittable>> = Vec::new();
-    let mat_ground = Lambertian { albedo: Color::new(0.8, 0.8, 0.0) };
+    let mat_ground = Lambertian { albedo: Checker {
+        odd_color: Color::new(0.2, 0.3, 0.1),
+        even_color: Color::new(0.9, 0.9, 0.9),
+        scale: 32.0,
+    }};
     objects.push(Box::new(Sphere::new(
                 Vec3::new(0.0, -1000.0, 0.0),
                 1000.0,
@@ -42,9 +47,16 @@ pub fn gen_scene() -> Scene {
                     objects.push(Box::new(Sphere::new(
                         center,
                         0.2,
+                        Lambertian { albedo: Checker {
+                            odd_color: Color::new(0.2, 0.3, 0.1),
+                            even_color: Color::new(0.9, 0.9, 0.9),
+                            scale: 32.0,
+                        }}
+                        /*
                         Lambertian {
-                            albedo: Color::random() * Color::random()
+                            albedo: SolidColor { color: Color::random() * Color::random() }
                         }
+                        */
                     )));
                 } else if choose_mat < 0.95 {
                     // metal
@@ -80,7 +92,7 @@ pub fn gen_scene() -> Scene {
         Vec3::new(-4.0, 1.0, 0.0),
         1.0,
         Lambertian {
-            albedo: Color::new(0.4, 0.2, 0.1)
+            albedo: SolidColor { color: Color::new(0.4, 0.2, 0.1) }
         }
     )));
     objects.push(Box::new(Sphere::new(

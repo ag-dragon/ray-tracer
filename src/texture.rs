@@ -4,8 +4,8 @@ pub mod uv;
 pub use self::solid_color::SolidColor;
 pub use self::checker::Checker;
 pub use self::uv::UVTexture;
-use crate::vectors::{Vec3, Color};
+use crate::vectors::Color;
 
 pub trait Texture {
-    fn color(&self, u: f64, v: f64, p: Vec3<f64>) -> Color;
+    fn color(&self, u: f64, v: f64) -> Color;
 }

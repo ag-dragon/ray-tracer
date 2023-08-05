@@ -1,5 +1,4 @@
 use crate::material::{Scatter, Material};
-use crate::vectors::Color;
 use crate::vectors::Vec3;
 use crate::ray::Ray;
 use crate::shape::HitRecord;
@@ -21,7 +20,7 @@ impl<T: Texture> Material for Lambertian<T> {
 
         Some( Scatter {
             scattered: Ray::new(rec.point, scatter_direction),
-            attenuation: self.albedo.color(rec.u, rec.v, rec.point),
+            attenuation: self.albedo.color(rec.u, rec.v),
         })
     }
 }

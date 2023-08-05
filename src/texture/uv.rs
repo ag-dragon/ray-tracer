@@ -1,10 +1,10 @@
 use crate::texture::Texture;
-use crate::vectors::{Vec3, Color};
+use crate::vectors::Color;
 
 pub struct UVTexture;
 
 impl Texture for UVTexture {
-    fn color(&self, u: f64, v: f64, p: Vec3<f64>) -> Color {
+    fn color(&self, u: f64, v: f64) -> Color {
         Color::new(u, v, 0.0)
     }
 }

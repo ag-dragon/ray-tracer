@@ -1,7 +1,7 @@
 use crate::scene::Scene;
 use crate::vectors::{Vec3, Color};
-use crate::material::{Lambertian, Metal, Dielectric};
-use crate::texture::{SolidColor, Checker, UVTexture};
+use crate::material::{Lambertian};
+use crate::texture::{Checker, UVTexture};
 use crate::shape::{Hittable, Sphere};
 use crate::Camera;
 
@@ -21,7 +21,6 @@ pub fn gen_scene() -> Scene {
     );
 
     let mut objects: Vec<Box<dyn Hittable>> = Vec::new();
-    let mat_test = Lambertian { albedo: UVTexture {} };
     objects.push(Box::new(Sphere::new(
                 Vec3::new(0.0, 0.0, 0.0),
                 0.5,
@@ -30,7 +29,11 @@ pub fn gen_scene() -> Scene {
     objects.push(Box::new(Sphere::new(
                 Vec3::new(1.0, 0.0, 0.5),
                 0.5,
-                Lambertian { albedo: UVTexture {} }
+                Lambertian { albedo: Checker {
+                    odd_color: Color::new(0.1, 0.1, 0.1),
+                    even_color: Color::new(0.9, 0.9, 0.9),
+                    scale: 32.0,
+                }}
     )));
     objects.push(Box::new(Sphere::new(
                 Vec3::new(-1.0, 0.0, 0.5),

@@ -1,5 +1,5 @@
 use crate::texture::Texture;
-use crate::vectors::{Vec3, Color};
+use crate::vectors::Color;
 
 pub struct Checker {
     pub odd_color: Color,
@@ -8,12 +8,14 @@ pub struct Checker {
 }
 
 impl Texture for Checker {
-    fn color(&self, u: f64, v: f64, p: Vec3<f64>) -> Color {
-        let sines = (10.0 * p.x).sin() * (10.0 * p.y).sin() * (10.0 * p.z).sin();
-        if sines < 0.0 {
-            self.odd_color
-        } else {
+    fn color(&self, u: f64, v: f64) -> Color {
+        let s = (u * self.scale).floor();
+        let t = (v * self.scale).floor();
+
+        if (s + t) % 2.0 == 0.0 {
             self.even_color
+        } else {
+            self.odd_color
         }
     }
 }

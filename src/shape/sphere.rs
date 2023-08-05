@@ -65,6 +65,7 @@ mod tests {
     use super::*;
     use crate::vectors::Color;
     use crate::material::Lambertian;
+    use crate::texture::SolidColor;
 
     #[test]
     fn test_new() {
@@ -72,7 +73,7 @@ mod tests {
             Vec3::new(1.0, 2.0, 3.0),
             0.5,
             Lambertian {
-                albedo: Color::new(0.5, 0.5, 0.5)
+                albedo: SolidColor { color: Color::new(0.5, 0.5, 0.5) }
             }
         );
 
@@ -88,7 +89,7 @@ mod tests {
             Vec3::new(0.0, 0.0, -1.0),
             0.5,
             Lambertian {
-                albedo: Color::new(0.5, 0.5, 0.5)
+                albedo: SolidColor { color: Color::new(0.5, 0.5, 0.5) }
             }
         );
         let r = Ray::new(

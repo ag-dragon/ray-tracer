@@ -3,6 +3,10 @@ use crate::vectors::Color;
 use crate::scene::Scene;
 use crate::shape::Hittable;
 
+use crate::texture::Texture;
+use crate::shape::Sphere;
+use crate::material::Metal;
+
 #[derive(Copy, Clone, Debug)]
 pub struct Ray {
     pub origin: Vec3<f64>,
@@ -35,9 +39,21 @@ impl Ray {
 
         // Background color
         let unit_direction = self.direction.normalized();
-        let t = (unit_direction.y + 1.0) * 0.5;
-
-        Color::one()*(1.0 - t) + Color::new(0.5, 0.7, 1.0) * t
+        match &scene.skybox {
+            Some(sky) => {
+                let (u, v) = Sphere::<Metal>::get_uv(unit_direction);
+                let c = sky.color(u, v);
+                Color::new(
+                    c.x * c.x,
+                    c.y * c.y,
+                    c.z * c.z
+                )
+            },
+            None => {
+                let t = (unit_direction.y + 1.0) * 0.5;
+                Color::one()*(1.0 - t) + Color::new(0.5, 0.7, 1.0) * t
+            },
+        }
     }
 }
 

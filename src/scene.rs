@@ -1,17 +1,20 @@
 pub mod weekend;
 pub mod triple_sphere;
+pub mod sky;
 use crate::shape::{Hittable, HitRecord};
 use crate::ray::Ray;
 use crate::Camera;
+use crate::texture::ImageTexture;
 
 pub struct Scene {
     pub camera: Camera,
     pub objects: Vec<Box<dyn Hittable>>,
+    pub skybox: Option<ImageTexture>,
 }
 
 impl Scene {
-    pub fn new(camera: Camera, objects: Vec<Box<dyn Hittable>>) -> Self {
-        Self { camera, objects }
+    pub fn new(camera: Camera, objects: Vec<Box<dyn Hittable>>, skybox: Option<ImageTexture>) -> Self {
+        Self { camera, objects, skybox }
     }
 }
 

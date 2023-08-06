@@ -103,5 +103,5 @@ pub fn gen_scene() -> Scene {
             fuzz: 0.0
         }
     )));
-    Scene::new(cam, objects)
+    Scene::new(cam, objects, None)
 }

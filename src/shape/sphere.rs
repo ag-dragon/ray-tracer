@@ -14,7 +14,7 @@ impl<M: Material> Sphere<M> {
         Self { center, radius, material }
     }
 
-    fn get_uv(p: Vec3<f64>) -> (f64, f64) {
+    pub fn get_uv(p: Vec3<f64>) -> (f64, f64) {
         let theta = (-p.y).acos();
         let phi = (-p.z).atan2(p.x) + std::f64::consts::PI;
 

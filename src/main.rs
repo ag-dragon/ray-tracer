@@ -8,13 +8,13 @@ struct Args {
     #[arg(short, long, default_value_t = String::from("images/image.png"))]
     file_path: String,
 
-    #[arg(short, long, default_value_t = 400)]
+    #[arg(short, long, default_value_t = 800)]
     image_width: i32,
 
-    #[arg(short, long, default_value_t = 50)]
+    #[arg(short, long, default_value_t = 100)]
     samples_per_pixel: i32,
 
-    #[arg(short, long, default_value_t = 5)]
+    #[arg(short, long, default_value_t = 20)]
     max_depth: i32,
 }
 
@@ -25,7 +25,7 @@ fn main() {
     let start = Instant::now();
 
     // Scene
-    let scene = scene::triple_sphere::gen_scene();
+    let scene = scene::sky::gen_scene();
 
     let image_buffer = rtir::render(
         &scene,

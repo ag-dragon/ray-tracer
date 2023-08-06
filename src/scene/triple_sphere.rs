@@ -1,12 +1,12 @@
 use crate::scene::Scene;
 use crate::vectors::{Vec3, Color};
 use crate::material::{Lambertian};
-use crate::texture::{Checker, UVTexture};
+use crate::texture::{Checker, UVTexture, ImageTexture};
 use crate::shape::{Hittable, Sphere};
 use crate::Camera;
 
 pub fn gen_scene() -> Scene {
-    let lookfrom = Vec3::new(0.0, 0.0, 3.0);
+    let lookfrom = Vec3::new(2.0, 1.0, 3.0);
     let lookat = Vec3::<f64>::zero();
     let vup = Vec3::new(0.0, 1.0, 0.0);
     let aspect_ratio = 3.0 / 2.0;
@@ -38,7 +38,7 @@ pub fn gen_scene() -> Scene {
     objects.push(Box::new(Sphere::new(
                 Vec3::new(-1.0, 0.0, 0.5),
                 0.5,
-                Lambertian { albedo: UVTexture {} }
+                Lambertian { albedo: ImageTexture::load(String::from("./examples/textures/earth.jpg")) }
     )));
     Scene::new(cam, objects)
 }

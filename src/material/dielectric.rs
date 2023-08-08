@@ -4,6 +4,7 @@ use crate::ray::Ray;
 use crate::shape::HitRecord;
 use rand::{thread_rng, Rng};
 
+#[derive(Clone)]
 pub struct Dielectric {
     pub ir: f64
 }

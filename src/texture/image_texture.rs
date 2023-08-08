@@ -3,6 +3,7 @@ use crate::vectors::Color;
 use image::GenericImageView;
 use num::clamp;
 
+#[derive(Clone)]
 pub struct ImageTexture {
     pub image: Vec<u8>,
     pub width: u32,
@@ -10,7 +11,7 @@ pub struct ImageTexture {
 }
 
 impl ImageTexture {
-    pub fn load(filepath: String) -> ImageTexture {
+    pub fn load(filepath: String) -> Self {
        let image_file = image::open(filepath).unwrap(); 
        let width = image_file.dimensions().0;
        let height = image_file.dimensions().1;

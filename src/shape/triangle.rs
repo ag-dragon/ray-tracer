@@ -44,7 +44,7 @@ impl<M: Material + Send + Sync> Hittable for Triangle<M> {
 
         if t > t_min && t < t_max {
             let point = ray.origin + (ray.direction * t);
-            let normal = v0v1.cross(v0v2);
+            let normal = v0v1.cross(v0v2).normalized();
             let front_face = ray.direction.dot(normal) < 0.0;
             Some(HitRecord {
                 point,

@@ -1,8 +1,8 @@
 use crate::scene::Scene;
 use crate::vectors::{Vec3, Color};
-use crate::material::Lambertian;
-use crate::texture::SolidColor;
-use crate::shape::{Hittable, Triangle};
+use crate::material::{Lambertian, Metal};
+use crate::texture::{SolidColor, ImageTexture};
+use crate::shape::{Hittable, Triangle, Sphere};
 use crate::Camera;
 
 pub fn gen_scene() -> Scene {
@@ -23,13 +23,30 @@ pub fn gen_scene() -> Scene {
     let mut objects: Vec<Box<dyn Hittable>> = Vec::new();
     objects.push(Box::new(Triangle::new(
                 [
-                    Vec3::new(0.0, 1.0, 0.0),
+                    Vec3::new(0.0, 1.0, -0.5),
+                    Vec3::new(-1.0, -1.0, 0.0),
                     Vec3::new(1.0, -1.0, 0.0),
-                    Vec3::new(-1.0, -1.0, 0.0)
                 ],
-                Lambertian {
-                    albedo: SolidColor { color: Color::new(0.1, 0.8, 0.1) }
+                Metal {
+                    albedo: Color::new(1.0, 1.0, 1.0),
+                    fuzz: 0.0,
                 }
     )));
-    Scene::new(cam, objects, None)
+    objects.push(Box::new(Sphere::new(
+                Vec3::new(0.0, -1001.0, 0.0),
+                1000.0,
+                Lambertian {
+                    albedo: SolidColor { color: Color::new(0.8, 0.5, 0.5) }
+                }
+    )));
+    objects.push(Box::new(Sphere::new(
+                Vec3::new(2.0, 0.5, 0.0),
+                0.5,
+                Metal {
+                    albedo: Color::new(1.0, 1.0, 1.0),
+                    fuzz: 0.0,
+                }
+    )));
+    let skybox = ImageTexture::load(String::from("./examples/textures/sky.png"));
+    Scene::new(cam, objects, Some(skybox))
 }

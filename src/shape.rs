@@ -1,5 +1,7 @@
 pub mod sphere;
+pub mod triangle;
 pub use self::sphere::Sphere;
+pub use self::triangle::Triangle;
 
 use crate::material::Material;
 use crate::vectors::Vec3;

@@ -1,6 +1,7 @@
 use crate::texture::Texture;
 use crate::vectors::Color;
 
+#[derive(Clone)]
 pub struct SolidColor {
     pub color: Color,
 }

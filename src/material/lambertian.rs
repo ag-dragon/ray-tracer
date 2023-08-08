@@ -4,6 +4,7 @@ use crate::ray::Ray;
 use crate::shape::HitRecord;
 use crate::texture::Texture;
 
+#[derive(Clone)]
 pub struct Lambertian<T: Texture> {
     pub albedo: T,
 }

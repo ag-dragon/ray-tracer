@@ -5,12 +5,14 @@ use crate::material::Material;
 
 pub struct Triangle<M: Material> {
     pub vertices: [Vec3<f64>; 3],
+    pub normals: Option<[Vec3<f64>; 3]>,
+    pub texture_cords: Option<[(f64, f64); 3]>,
     pub material: M,
 }
 
 impl<M: Material> Triangle<M> {
-    pub fn new(vertices: [Vec3<f64>; 3], material: M) -> Self {
-        Self { vertices, material }
+    pub fn new(vertices: [Vec3<f64>; 3], normals: Option<[Vec3<f64>; 3]>, texture_cords: Option<[(f64, f64); 3]>, material: M) -> Self {
+        Self { vertices, normals, texture_cords, material }
     }
 }
 
@@ -29,14 +31,14 @@ impl<M: Material + Send + Sync> Hittable for Triangle<M> {
         let inv_det = 1.0 / det;
 
         let s = ray.origin - self.vertices[0];
-        let u = s.dot(p) * inv_det;
-        if u < 0.0 || u > 1.0 {
+        let b = s.dot(p) * inv_det;
+        if b < 0.0 || b > 1.0 {
             return None;
         }
 
         let q = s.cross(v0v1);
-        let v = ray.direction.dot(q) * inv_det;
-        if v < 0.0 || u + v > 1.0 {
+        let c = ray.direction.dot(q) * inv_det;
+        if c < 0.0 || b + c > 1.0 {
             return None;
         }
 
@@ -44,15 +46,32 @@ impl<M: Material + Send + Sync> Hittable for Triangle<M> {
 
         if t > t_min && t < t_max {
             let point = ray.origin + (ray.direction * t);
-            let normal = v0v1.cross(v0v2).normalized();
+            let a = 1.0 - b - c;
+            let normal = match self.normals {
+                Some(vert_norms) => {
+                    (vert_norms[0]*a + vert_norms[1]*b + vert_norms[2]*c).normalized()
+                },
+                None => {
+                    v0v1.cross(v0v2).normalized()
+                }
+            };
+            let (u, v) = match self.texture_cords {
+                Some(vert_tex) => {
+                    (
+                        vert_tex[0].0*a + vert_tex[1].0*b + vert_tex[2].0*c,
+                        vert_tex[0].1*a + vert_tex[1].1*b + vert_tex[2].1*c
+                    )
+                },
+                None => (0.0, 0.0)
+            };
             let front_face = ray.direction.dot(normal) < 0.0;
             Some(HitRecord {
                 point,
                 normal,
                 material: &self.material,
                 t,
-                u: 0.0,
-                v: 0.0,
+                u,
+                v,
                 front_face,
             })
         } else {

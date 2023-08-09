@@ -14,6 +14,7 @@ impl Material for Metal {
     fn scatter(&self, ray_in: &Ray, rec: &HitRecord) -> Option<Scatter> {
         let reflected = ray_in.direction.normalized().reflect(rec.normal);
         let scattered = Ray::new(rec.point, reflected + Vec3::random_in_unit_sphere()*self.fuzz);
+
         if scattered.direction.dot(rec.normal) > 0.0 {
             return Some( Scatter {
                 scattered,

@@ -27,6 +27,8 @@ pub fn gen_scene() -> Scene {
                     Vec3::new(-1.0, -1.0, 0.0),
                     Vec3::new(1.0, -1.0, 0.0),
                 ],
+                None,
+                None,
                 Metal {
                     albedo: Color::new(1.0, 1.0, 1.0),
                     fuzz: 0.0,

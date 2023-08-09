@@ -1,8 +1,8 @@
 use crate::scene::Scene;
 use crate::vectors::{Vec3, Color};
-use crate::material::{Metal, Dielectric, Lambertian};
-use crate::texture::{ImageTexture, SolidColor};
-use crate::shape::{Hittable, Mesh, Sphere};
+use crate::material::Metal;
+use crate::texture::ImageTexture;
+use crate::shape::{Hittable, Mesh};
 use crate::Camera;
 
 pub fn gen_scene() -> Scene {
@@ -24,9 +24,6 @@ pub fn gen_scene() -> Scene {
     let mesh_material = Metal {
         albedo: Color::new(1.0, 1.0, 1.0),
         fuzz: 0.0,
-    };
-    let test_material = Dielectric {
-        ir: 1.5
     };
     objects.push(Box::new(Mesh::load(String::from("./examples/teapot2.obj"),
         mesh_material

@@ -1,8 +1,8 @@
 use crate::scene::Scene;
 use crate::vectors::{Vec3, Color};
-use crate::material::{Lambertian, Metal, Dielectric};
+use crate::material::{Lambertian, Dielectric};
 use crate::texture::{SolidColor, ImageTexture};
-use crate::shape::{Hittable, Triangle, Sphere, Mesh};
+use crate::shape::{Hittable, Sphere, Mesh};
 use crate::Camera;
 
 pub fn gen_scene() -> Scene {

@@ -1,8 +1,8 @@
 use crate::scene::Scene;
 use crate::vectors::{Vec3, Color};
-use crate::material::{Lambertian, Metal};
-use crate::texture::{SolidColor, ImageTexture, Checker, UVTexture};
-use crate::shape::{Hittable, Triangle, Mesh, Sphere};
+use crate::material::Metal;
+use crate::texture::ImageTexture;
+use crate::shape::{Hittable, Mesh};
 use crate::Camera;
 
 pub fn gen_scene() -> Scene {
@@ -25,15 +25,6 @@ pub fn gen_scene() -> Scene {
         albedo: Color::new(1.0, 1.0, 1.0),
         fuzz: 0.0,
     };
-    let floor_material = Lambertian { albedo: SolidColor {
-        color: Color::new(0.2, 0.2, 0.2)
-    }};
-    let test_material = Lambertian { albedo: UVTexture { } };
-    let checker_material = Lambertian { albedo: Checker {
-        odd_color: Color::new(0.2, 0.2, 0.2),
-        even_color: Color::new(0.8, 0.8, 0.8),
-        scale: 8.0,
-    }};
     objects.push(Box::new(Mesh::load(String::from("./examples/teapot2.obj"),
         mesh_material
     )));

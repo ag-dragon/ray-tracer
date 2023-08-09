@@ -25,7 +25,7 @@ fn main() {
     let start = Instant::now();
 
     // Scene
-    let scene = scene::mesh_test::gen_scene();
+    let scene = scene::cube::gen_scene();
 
     let image_buffer = rtir::render(
         &scene,

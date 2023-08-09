@@ -89,7 +89,6 @@ impl<M: Material + Clone> Mesh<M> {
                 }
             }
         }
-        println!("{}", triangles.len());
 
         Self { triangles }
     }

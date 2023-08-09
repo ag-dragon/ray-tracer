@@ -64,11 +64,10 @@ impl<M: Material + Send + Sync> Hittable for Triangle<M> {
                 },
                 None => (0.0, 0.0)
             };
-            println!("normal: {} {} {}", normal.x, normal.y, normal.z);
             let front_face = ray.direction.dot(normal) < 0.0;
             Some(HitRecord {
                 point,
-                normal,
+                normal: if front_face { normal } else { -normal },
                 material: &self.material,
                 t,
                 u,

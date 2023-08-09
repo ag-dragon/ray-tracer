@@ -64,6 +64,7 @@ impl<M: Material + Send + Sync> Hittable for Triangle<M> {
                 },
                 None => (0.0, 0.0)
             };
+            println!("normal: {} {} {}", normal.x, normal.y, normal.z);
             let front_face = ray.direction.dot(normal) < 0.0;
             Some(HitRecord {
                 point,
@@ -83,12 +84,69 @@ impl<M: Material + Send + Sync> Hittable for Triangle<M> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::vectors::Color;
+    use crate::material::Lambertian;
+    use crate::texture::SolidColor;
 
     #[test]
     fn test_new() {
+        let t = Triangle::new(
+            [Vec3::new(0.0, 0.0, 0.0),
+            Vec3::new(1.0, 0.0, 0.0),
+            Vec3::new(1.0, 1.0, 0.0)],
+            None,
+            None,
+            Lambertian {
+                albedo: SolidColor { color: Color::new(0.5, 0.5, 0.5) }
+            }
+        );
+
+        assert_eq!(t.vertices[0].x, 0.0);
+        assert_eq!(t.vertices[0].y, 0.0);
+        assert_eq!(t.vertices[0].z, 0.0);
+        assert_eq!(t.vertices[1].x, 1.0);
+        assert_eq!(t.vertices[1].y, 0.0);
+        assert_eq!(t.vertices[1].z, 0.0);
+        assert_eq!(t.vertices[2].x, 1.0);
+        assert_eq!(t.vertices[2].y, 1.0);
+        assert_eq!(t.vertices[2].z, 0.0);
+        assert_eq!(t.normals, None);
+        assert_eq!(t.texture_cords, None);
     }
 
     #[test]
     fn test_hit() {
+        let t = Triangle::new(
+            [Vec3::new(0.0, 0.0, 0.0),
+            Vec3::new(1.0, 0.0, 0.0),
+            Vec3::new(1.0, 1.0, 0.0)],
+            None,
+            None,
+            Lambertian {
+                albedo: SolidColor { color: Color::new(0.5, 0.5, 0.5) }
+            }
+        );
+
+        let r = Ray::new(
+            Vec3::new(0.0, 0.0, 1.0),
+            Vec3::new(0.0, 1.0, 0.0)
+        );
+        let h = t.hit(&r, (0.0, 2.0));
+        assert!(h.is_none());
+
+        let r = Ray::new(
+            Vec3::new(0.0, 0.0, 1.0),
+            Vec3::new(0.0, 0.0, -1.0)
+        );
+        let h = t.hit(&r, (0.0, 2.0));
+        match h {
+            Some(rec) => {
+                assert_eq!(rec.point, Vec3::new(0.0, 0.0, 0.0));
+                assert_eq!(rec.normal, Vec3::new(0.0, 0.0, 1.0));
+                assert_eq!(rec.t, 1.0);
+                assert!(rec.front_face);
+            },
+            None => assert!(false),
+        }
     }
 }

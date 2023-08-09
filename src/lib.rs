@@ -13,6 +13,7 @@ use crate::scene::Scene;
 use rand::{thread_rng, Rng};
 use num::clamp;
 use rayon::prelude::*;
+use indicatif::ProgressBar;
 
 pub fn render(scene: &Scene, image_width: i32, samples_per_pixel: i32, max_depth: i32) -> Vec<u8> {
     let cam = &scene.camera;
@@ -21,9 +22,10 @@ pub fn render(scene: &Scene, image_width: i32, samples_per_pixel: i32, max_depth
     let mut image_buffer: Vec<u8> = vec![0; (image_width * image_height * 3) as usize];
     let rows: Vec<(usize, &mut [u8])> = image_buffer.chunks_mut((image_width * 3) as usize).rev().enumerate().collect();
 
+    let bar = ProgressBar::new(rows.len().try_into().unwrap());
+
     rows.into_par_iter().for_each(|(j, row)| {
         let mut rng = thread_rng();
-        println!("Started row {}", j);
         for i in 0..image_width {
             let mut pixel_color_sum = Vec3::zero();
             for _s in 0..samples_per_pixel {
@@ -43,8 +45,10 @@ pub fn render(scene: &Scene, image_width: i32, samples_per_pixel: i32, max_depth
             row[((i*3)+1) as usize] = (256.0 * clamp(pixel_color_sum.y.sqrt(), 0.0, 0.999)) as u8;
             row[((i*3)+2) as usize] = (256.0 * clamp(pixel_color_sum.z.sqrt(), 0.0, 0.999)) as u8;
         }
-        println!("Finished row {}", j);
+        bar.inc(1);
     });
+
+    bar.finish();
 
     image_buffer
 }

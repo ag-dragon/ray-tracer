@@ -1,8 +1,8 @@
 use crate::scene::Scene;
 use crate::vectors::{Vec3, Color};
-use crate::material::Metal;
-use crate::texture::ImageTexture;
-use crate::shape::{Hittable, Mesh};
+use crate::material::{Lambertian, Metal};
+use crate::texture::{ImageTexture, Checker};
+use crate::shape::{Hittable, Mesh, Plane};
 use crate::Camera;
 
 pub fn gen_scene() -> Scene {
@@ -25,6 +25,17 @@ pub fn gen_scene() -> Scene {
         albedo: Color::new(1.0, 1.0, 1.0),
         fuzz: 0.0,
     };
+    objects.push(Box::new(Plane::new(
+                Vec3::new(0.0, -10.0, 0.0),
+                Vec3::new(0.0, 1.0, 0.0),
+                Lambertian {
+                    albedo: Checker {
+                        odd_color: Color::new(0.2, 0.2, 0.2),
+                        even_color: Color::new(0.8, 0.8, 0.8),
+                        scale: 0.5,
+                    }
+                }
+    )));
     objects.push(Box::new(Mesh::load(String::from("./examples/teapot2.obj"),
         mesh_material
     )));

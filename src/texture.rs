@@ -6,7 +6,7 @@ pub use self::solid_color::SolidColor;
 pub use self::image_texture::ImageTexture;
 pub use self::checker::Checker;
 pub use self::uv::UVTexture;
-use crate::vectors::Color;
+use crate::vector::Color;
 
 pub trait Texture {
     fn color(&self, u: f64, v: f64) -> Color;

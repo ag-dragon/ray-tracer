@@ -7,7 +7,7 @@ pub use self::metal::Metal;
 pub use self::dielectric::Dielectric;
 pub use self::diffuse_light::DiffuseLight;
 
-use crate::vectors::Color;
+use crate::vector::Color;
 use crate::ray::Ray;
 use crate::shape::HitRecord;
 

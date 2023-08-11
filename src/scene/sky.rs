@@ -1,5 +1,5 @@
 use crate::scene::Scene;
-use crate::vectors::{Vec3, Color};
+use crate::vector::{Vec3, Color};
 use crate::material::Metal;
 use crate::texture::ImageTexture;
 use crate::shape::{Hittable, Sphere};

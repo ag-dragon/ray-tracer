@@ -1,5 +1,4 @@
-use crate::vectors::Vec3;
-use crate::vectors::Color;
+use crate::vector::{Vec3, Color};
 use crate::scene::Scene;
 use crate::shape::Hittable;
 

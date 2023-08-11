@@ -1,4 +1,4 @@
-pub mod vectors;
+pub mod vector;
 pub mod ray;
 pub mod shape;
 pub mod camera;
@@ -6,7 +6,7 @@ pub mod scene;
 pub mod material;
 pub mod texture;
 
-use vectors::Vec3;
+use vector::Vec3;
 use camera::Camera;
 use crate::scene::Scene;
 

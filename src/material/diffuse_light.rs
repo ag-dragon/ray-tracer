@@ -1,5 +1,5 @@
 use crate::material::{Scatter, Material};
-use crate::vectors::Color;
+use crate::vector::Color;
 use crate::ray::Ray;
 use crate::shape::HitRecord;
 use crate::texture::Texture;

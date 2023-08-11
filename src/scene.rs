@@ -4,6 +4,7 @@ pub mod sky;
 pub mod triangle_test;
 pub mod mesh_test;
 pub mod cube;
+pub mod dark;
 use crate::shape::{Hittable, HitRecord};
 use crate::ray::Ray;
 use crate::Camera;

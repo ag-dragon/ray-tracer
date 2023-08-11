@@ -25,7 +25,7 @@ fn main() {
     let start = Instant::now();
 
     // Scene
-    let scene = scene::triple_sphere::gen_scene();
+    let scene = scene::dark::gen_scene();
 
     let image_buffer = rtir::render(
         &scene,

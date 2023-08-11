@@ -50,8 +50,7 @@ impl Ray {
                 )
             },
             None => {
-                let t = (unit_direction.y + 1.0) * 0.5;
-                Color::one()*(1.0 - t) + Color::new(0.5, 0.7, 1.0) * t
+                scene.background
             },
         }
     }

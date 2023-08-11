@@ -41,5 +41,5 @@ pub fn gen_scene() -> Scene {
                 Lambertian { albedo: ImageTexture::load(String::from("./assets/textures/earth.jpg")) }
     )));
     let skybox = ImageTexture::load(String::from("./assets/textures/stars.jpg"));
-    Scene::new(cam, objects, Some(skybox))
+    Scene::new(cam, objects, Some(skybox), Color::zero())
 }

@@ -39,5 +39,5 @@ pub fn gen_scene() -> Scene {
                 }
     )));
     let skybox = ImageTexture::load(String::from("./assets/textures/sky.png"));
-    Scene::new(cam, objects, Some(skybox))
+    Scene::new(cam, objects, Some(skybox), Color::zero())
 }

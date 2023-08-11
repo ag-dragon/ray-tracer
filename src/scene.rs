@@ -8,16 +8,18 @@ use crate::shape::{Hittable, HitRecord};
 use crate::ray::Ray;
 use crate::Camera;
 use crate::texture::ImageTexture;
+use crate::vector::Color;
 
 pub struct Scene {
     pub camera: Camera,
     pub objects: Vec<Box<dyn Hittable>>,
     pub skybox: Option<ImageTexture>,
+    pub background: Color,
 }
 
 impl Scene {
-    pub fn new(camera: Camera, objects: Vec<Box<dyn Hittable>>, skybox: Option<ImageTexture>) -> Self {
-        Self { camera, objects, skybox }
+    pub fn new(camera: Camera, objects: Vec<Box<dyn Hittable>>, skybox: Option<ImageTexture>, background: Color) -> Self {
+        Self { camera, objects, skybox, background }
     }
 }
 

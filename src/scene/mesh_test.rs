@@ -36,9 +36,9 @@ pub fn gen_scene() -> Scene {
                     }
                 }
     )));
-    objects.push(Box::new(Mesh::load(String::from("./examples/teapot2.obj"),
+    objects.push(Box::new(Mesh::load(String::from("./assets/teapot2.obj"),
         mesh_material
     )));
-    let skybox = ImageTexture::load(String::from("./examples/textures/sky.png"));
+    let skybox = ImageTexture::load(String::from("./assets/textures/sky.png"));
     Scene::new(cam, objects, Some(skybox))
 }

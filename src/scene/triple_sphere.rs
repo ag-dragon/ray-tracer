@@ -38,8 +38,8 @@ pub fn gen_scene() -> Scene {
     objects.push(Box::new(Sphere::new(
                 Vec3::new(-1.0, 0.0, 0.5),
                 0.5,
-                Lambertian { albedo: ImageTexture::load(String::from("./examples/textures/earth.jpg")) }
+                Lambertian { albedo: ImageTexture::load(String::from("./assets/textures/earth.jpg")) }
     )));
-    let skybox = ImageTexture::load(String::from("./examples/textures/stars.jpg"));
+    let skybox = ImageTexture::load(String::from("./assets/textures/stars.jpg"));
     Scene::new(cam, objects, Some(skybox))
 }

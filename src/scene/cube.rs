@@ -21,7 +21,7 @@ pub fn gen_scene() -> Scene {
     );
 
     let mut objects: Vec<Box<dyn Hittable>> = Vec::new();
-    objects.push(Box::new(Mesh::load(String::from("./examples/cube.obj"),
+    objects.push(Box::new(Mesh::load(String::from("./assets/cube.obj"),
                 Dielectric { ir: 1.5 })));
     objects.push(Box::new(Sphere::new(
                 Vec3::new(0.0, 0.0, 0.0),
@@ -30,6 +30,6 @@ pub fn gen_scene() -> Scene {
                     albedo: SolidColor { color: Color::new(0.8, 0.5, 0.5) }
                 }
     )));
-    let skybox = ImageTexture::load(String::from("./examples/textures/sky.png"));
+    let skybox = ImageTexture::load(String::from("./assets/textures/sky.png"));
     Scene::new(cam, objects, Some(skybox))
 }

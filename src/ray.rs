@@ -30,10 +30,11 @@ impl Ray {
 
         // Check if ray hits any other objects in scene
         if let Some(hit_record) = scene.hit(self, (0.001, f64::INFINITY)) {
+            let emitted = hit_record.material.emitted(hit_record.u, hit_record.v);
             if let Some(scatter) = hit_record.material.scatter(self, &hit_record) {
-                return scatter.attenuation * scatter.scattered.color(scene, depth-1);
+                return emitted + scatter.attenuation * scatter.scattered.color(scene, depth-1);
             } else {
-                return Color::zero();
+                return emitted;
             }
         }
 

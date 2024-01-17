@@ -2,7 +2,7 @@
 
 ![weekend](assets/examples/weekend.png)
 
-An ray-tracer written with the intent of learning rust. Largely based on [Ray Tracing in One Weekend
+A ray-tracer written with the intent of learning rust. Largely based on [Ray Tracing in One Weekend
  by Peter Shirley](https://raytracing.github.io/books/RayTracingInOneWeekend.html), with some additional
  features.
 
